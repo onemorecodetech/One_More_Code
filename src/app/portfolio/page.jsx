@@ -1,6 +1,7 @@
 import Navbar from "../../components/navbar";
 import Footer from "../../components/footer";
 
+
 export default function PortfolioPage() {
   return (
     <main className="text-white min-h-screen">
@@ -12,6 +13,7 @@ export default function PortfolioPage() {
           Aqui ficarão os projetos, sites, sistemas e soluções desenvolvidas
           pela OneMoreCode.
         </p>
+        
       </section>
 
       <Footer />
