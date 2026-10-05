@@ -1,13 +1,13 @@
 export default function About() {
   return (
-    <section id="about" className="py-24 px-6 bg-white/[0.02]">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <section id="about" className="py-16 md:py-24 px-6 bg-white/[0.02]">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 sm:p-10 md:gap-12 items-center">
         <div>
           <p className="text-blue-400 text-sm uppercase tracking-widest mb-4">
             Sobre a empresa
           </p>
 
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance">
             Tecnologia com visão corporativa
           </h2>
 
@@ -28,7 +28,7 @@ export default function About() {
           </p>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-10">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-blue-500/10 to-purple-500/10 p-6 sm:p-10">
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-semibold mb-2">Missão</h3>

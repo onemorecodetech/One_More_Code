@@ -23,6 +23,11 @@
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
+    /* Evita rolagem lateral no celular caso algo passe da largura da tela */
+    overflow-x: clip;
+    /* Impede o iOS de aumentar o texto sozinho ao girar o aparelho */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   a {
@@ -34,9 +39,9 @@
     cursor: pointer;
   }
 
-  /* Compensa a altura da navbar ao clicar em links como #contact */
+  /* Compensa a altura da navbar fixa ao clicar em links como #contact */
   section[id] {
-    scroll-margin-top: 2rem;
+    scroll-margin-top: 5rem;
   }
 
   @media (prefers-reduced-motion: reduce) {

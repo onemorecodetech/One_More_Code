@@ -13,14 +13,16 @@ export default function Home() {
 
       <Navbar />
 
-      <section className="flex flex-col items-center justify-center py-12">
+      <section className="flex flex-col items-center justify-center px-6 py-10 md:py-12">
         <Image
           src="/images/Logo_onemorecode.jpeg"
           alt="Logo OneMoreCode"
           width={200}
           height={200}
+          priority
+          className="w-40 h-auto md:w-[200px]"
         />
-        <p className="text-lg mt-4 text-center max-w-xl">
+        <p className="text-base md:text-lg mt-4 text-center max-w-xl">
           Ideias transformadas em tecnologia para impulsionar negócios.
         </p>
       </section>
