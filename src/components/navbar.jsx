@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -13,72 +10,34 @@ const links = [
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-
-  // Fecha o menu ao voltar para a largura de desktop
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
-    const close = () => media.matches && setOpen(false);
-    media.addEventListener("change", close);
-    return () => media.removeEventListener("change", close);
-  }, []);
-
   return (
-    <header className="sticky top-0 z-50 bg-[#0B0F1A]/90 backdrop-blur border-b border-white/10 pt-[env(safe-area-inset-top)]">
-      <nav className="max-w-6xl mx-auto flex items-center justify-between gap-4 py-3 md:py-4 pl-[max(1.5rem,env(safe-area-inset-left))] pr-[max(1.5rem,env(safe-area-inset-right))]">
-        <Link href="/" className="flex items-center gap-3 min-w-0" onClick={() => setOpen(false)}>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0F1A]/70 backdrop-blur-md">
+      <nav className="max-w-6xl mx-auto flex items-center justify-between gap-6 px-6 py-4">
+        <Link href="/" className="flex shrink-0 items-center gap-3" aria-label="OneMoreCode, página inicial">
           <Image
-            src="/images/Logo_onemorecode.jpeg"
-            alt="OneMoreCode"
-            width={50}
-            height={50}
-            className="h-10 w-auto md:h-[50px] shrink-0"
+            src="/images/logo.png"
+            alt=""
+            width={52}
+            height={40}
+            priority
           />
-          <span className="text-lg md:text-xl font-bold truncate">
+          <span className="hidden sm:inline text-xl font-bold">
             OneMore<span className="text-blue-500">Code</span>
           </span>
         </Link>
 
-        <div className="hidden md:flex gap-6">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-blue-400 transition">
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          className="md:hidden inline-flex items-center justify-center h-11 w-11 -mr-2 rounded-lg hover:bg-white/10 transition"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((value) => !value)}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            {open ? (
-              <path d="M6 6l12 12M18 6L6 18" />
-            ) : (
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            )}
-          </svg>
-        </button>
-      </nav>
-
-      {open && (
-        <div id="mobile-menu" className="md:hidden border-t border-white/10 pb-4 pl-[max(1.5rem,env(safe-area-inset-left))] pr-[max(1.5rem,env(safe-area-inset-right))]">
+        <div className="flex min-w-0 gap-4 md:gap-8 text-sm md:text-base overflow-x-auto whitespace-nowrap">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => setOpen(false)}
-              className="block py-3 text-lg border-b border-white/5 last:border-b-0 hover:text-blue-400 transition"
+              className="text-white/80 hover:text-white transition"
             >
               {link.label}
             </Link>
           ))}
         </div>
-      )}
+      </nav>
     </header>
-    );
-  }
+  );
+}
