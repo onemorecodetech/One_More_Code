@@ -14,7 +14,7 @@ export default function ContactForm() {
     const form = event.currentTarget;
     const data = new FormData(form);
 
-    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "e3920951-c234-4390-b36c-25ffe82a2f6b";
     if (!accessKey) {
       setStatus("error");
       setFeedback(
