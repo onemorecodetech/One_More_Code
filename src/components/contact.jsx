@@ -1,7 +1,9 @@
+import ContactForm from "./contact-form";
+
 export default function Contact() {
   return (
     <section id="contact" className="py-24 px-6 bg-white/[0.02]">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-start">
         <div>
           <p className="text-blue-400 text-sm uppercase tracking-widest mb-4">
             Contato
@@ -19,10 +21,24 @@ export default function Contact() {
 
           <div className="space-y-4 text-white/80">
             <p>
-              <strong>Email:</strong> contato@onemorecode.tech
+              <strong>Email:</strong>{" "}
+              <a
+                href="mailto:contato@onemorecode.tech"
+                className="hover:text-blue-400 transition"
+              >
+                contato@onemorecode.tech
+              </a>
             </p>
             <p>
-              <strong>Instagram:</strong> @onemorecode.tech
+              <strong>Instagram:</strong>{" "}
+              <a
+                href="https://instagram.com/onemorecode.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-400 transition"
+              >
+                @onemorecode.tech
+              </a>
             </p>
             <p>
               <strong>Atendimento:</strong> Online
@@ -30,41 +46,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <form className="rounded-2xl border border-white/10 bg-white/5 p-8 space-y-5">
-          <div>
-            <label className="block mb-2 text-sm text-white/70">Nome</label>
-            <input
-              type="text"
-              placeholder="Seu nome"
-              className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 outline-none focus:border-blue-400"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 text-sm text-white/70">Email</label>
-            <input
-              type="email"
-              placeholder="seuemail@exemplo.com"
-              className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 outline-none focus:border-blue-400"
-            />
-          </div>
-
-          <div>
-            <label className="block mb-2 text-sm text-white/70">Mensagem</label>
-            <textarea
-              rows={5}
-              placeholder="Conte um pouco sobre o seu projeto..."
-              className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 outline-none focus:border-blue-400 resize-none"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 transition px-6 py-3 rounded-lg font-medium"
-          >
-            Enviar mensagem
-          </button>
-        </form>
+        <ContactForm />
       </div>
     </section>
   );

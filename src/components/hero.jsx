@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-[90vh] flex items-center justify-center px-6"
+      className="min-h-[90vh] flex items-center justify-center px-6 py-16"
     >
       <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
         <div>
@@ -19,17 +19,17 @@ export default function Hero() {
             para empresas que querem crescer com inovação, performance e presença digital.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <a
               href="#contact"
-              className="bg-blue-500 hover:bg-blue-600 transition px-6 py-3 rounded-lg font-medium"
+              className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-500 hover:bg-blue-600 text-base md:text-lg font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
             >
               Solicitar orçamento
             </a>
 
             <a
               href="#services"
-              className="border border-white/20 hover:border-blue-400 hover:text-blue-400 transition px-6 py-3 rounded-lg font-medium"
+              className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl border border-white/20 hover:border-blue-400 hover:text-blue-400 text-base md:text-lg font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
             >
               Ver serviços
             </a>
