@@ -2,14 +2,14 @@ import ContactForm from "./contact-form";
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-24 px-6 bg-white/[0.02]">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-start">
+    <section id="contact" className="py-16 md:py-24 px-6 bg-white/[0.02]">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-12 items-start">
         <div>
           <p className="text-blue-400 text-sm uppercase tracking-widest mb-4">
             Contato
           </p>
 
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-balance">
             Vamos tirar sua ideia do papel?
           </h2>
 
@@ -19,7 +19,7 @@ export default function Contact() {
             para o seu negócio.
           </p>
 
-          <div className="space-y-4 text-white/80">
+          <div className="space-y-4 text-white/80 break-words">
             <p>
               <strong>Email:</strong>{" "}
               <a

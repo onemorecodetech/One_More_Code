@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const inputClass =
-  "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-4 py-3.5 text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 disabled:opacity-60";
+  "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-4 py-3.5 text-base text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 disabled:opacity-60";
 
 export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
