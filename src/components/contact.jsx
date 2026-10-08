@@ -23,10 +23,10 @@ export default function Contact() {
             <p>
               <strong>Email:</strong>{" "}
               <a
-                href="mailto:contato@onemorecode.tech"
+                href="mailto:onemorecode233@gmail.com"
                 className="hover:text-blue-400 transition"
               >
-                contato@onemorecode.tech
+                onemorecode233@gmail.com
               </a>
             </p>
             <p>
