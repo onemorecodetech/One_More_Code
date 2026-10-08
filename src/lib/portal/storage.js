@@ -13,7 +13,9 @@ const ON_VERCEL = !!process.env.VERCEL;
 
 const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
 const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-const BLOB_TOKEN = process.env.BLOB_READ_WRITE_TOKEN;
+// O Blob pode vir conectado de dois jeitos: com BLOB_READ_WRITE_TOKEN (formato antigo)
+// ou com BLOB_STORE_ID (formato novo, a Vercel autentica sozinha)
+const BLOB_CONECTADO = !!(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
 
 let redis = null;
 async function getRedis() {
@@ -69,15 +71,21 @@ export async function salvarDB(db) {
 // de adivinhar. Nos dois casos o endereço nunca é mostrado ao cliente: o PDF
 // sempre passa pela rota /api/portal/arquivos, que confere quem está logado.
 export async function salvarArquivo(nome, buffer) {
-  if (BLOB_TOKEN) {
+  if (BLOB_CONECTADO) {
     const { put } = await import("@vercel/blob");
     const opcoes = { contentType: "application/pdf", addRandomSuffix: true };
     try {
       const blob = await put(`propostas/${nome}`, buffer, { ...opcoes, access: "private" });
       return `private|${blob.url}`;
-    } catch {
-      const blob = await put(`propostas/${nome}`, buffer, { ...opcoes, access: "public" });
-      return `public|${blob.url}`;
+    } catch (erroPrivado) {
+      try {
+        const blob = await put(`propostas/${nome}`, buffer, { ...opcoes, access: "public" });
+        return `public|${blob.url}`;
+      } catch (erroPublico) {
+        console.error("Blob (privado):", erroPrivado);
+        console.error("Blob (público):", erroPublico);
+        throw new Error(`Falha ao salvar o PDF no Vercel Blob: ${erroPrivado.message}`);
+      }
     }
   }
   if (ON_VERCEL) throw faltaConfig("Vercel Blob");

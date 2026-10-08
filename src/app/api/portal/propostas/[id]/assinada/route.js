@@ -4,7 +4,19 @@ import { lerDB, salvarDB, salvarArquivo } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 import { ehPdf, LIMITE_PDF, statusAtual } from "@/lib/portal/util";
 
-export async function POST(request, { params }) {
+export async function POST(request, contexto) {
+  try {
+    return await enviarAssinada(request, contexto);
+  } catch (e) {
+    console.error("Erro ao receber proposta assinada:", e);
+    return NextResponse.json(
+      { erro: "Não foi possível salvar o arquivo agora. Tente de novo em alguns minutos ou fale com a gente no WhatsApp." },
+      { status: 500 }
+    );
+  }
+}
+
+async function enviarAssinada(request, { params }) {
   const sessao = lerSessao();
   if (sessao?.tipo !== "cliente") return NextResponse.json({ erro: "Faça login novamente." }, { status: 401 });
 

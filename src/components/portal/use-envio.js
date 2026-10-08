@@ -16,7 +16,8 @@ export function useEnvio() {
         body: json ? JSON.stringify(json) : formData,
       });
       const dados = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(dados.erro || "Não foi possível concluir. Tente de novo.");
+      if (res.status === 413) throw new Error("Arquivo grande demais. O PDF deve ter no máximo 4 MB.");
+      if (!res.ok) throw new Error(dados.erro || `Não foi possível concluir (erro ${res.status}). Tente de novo.`);
       return dados;
     } catch (e) {
       setErro(e.message === "Failed to fetch" ? "Sem conexão. Verifique a internet." : e.message);

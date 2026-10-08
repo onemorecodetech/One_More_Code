@@ -9,11 +9,16 @@ export default function NovaProposta({ clientes }) {
   const router = useRouter();
   const [aberto, setAberto] = useState(false);
   const [sucesso, setSucesso] = useState("");
-  const { enviando, erro, enviar } = useEnvio();
+  const { enviando, erro, setErro, enviar } = useEnvio();
 
   async function onSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+    const pdf = form.arquivo.files[0];
+    if (pdf && pdf.size > 4 * 1024 * 1024) {
+      setErro(`Este PDF tem ${(pdf.size / 1024 / 1024).toFixed(1)} MB. O limite é 4 MB: exporte o PDF com imagens comprimidas e tente de novo.`);
+      return;
+    }
     const ok = await enviar("/api/portal/admin/propostas", { formData: new FormData(form) });
     if (ok) {
       form.reset();

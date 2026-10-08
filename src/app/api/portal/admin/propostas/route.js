@@ -6,6 +6,15 @@ import { lerSessao } from "@/lib/portal/auth";
 import { ehPdf, LIMITE_PDF, texto } from "@/lib/portal/util";
 
 export async function POST(request) {
+  try {
+    return await criarProposta(request);
+  } catch (e) {
+    console.error("Erro ao criar proposta:", e);
+    return NextResponse.json({ erro: e.message || "Erro interno ao criar a proposta." }, { status: 500 });
+  }
+}
+
+async function criarProposta(request) {
   if (lerSessao()?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const form = await request.formData();
