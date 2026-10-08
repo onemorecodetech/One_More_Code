@@ -1,0 +1,19 @@
+import { redirect } from "next/navigation";
+import PortalShell from "@/components/portal/shell";
+import FormEntrar from "@/components/portal/form-entrar";
+import { lerSessao } from "@/lib/portal/auth";
+import { card } from "@/components/portal/ui";
+
+export default function AdminEntrarPage() {
+  if (lerSessao()?.tipo === "admin") redirect("/admin");
+  return (
+    <PortalShell>
+      <div className="max-w-md mx-auto">
+        <h1 className="text-3xl font-bold mb-8">Painel de propostas</h1>
+        <div className={card}>
+          <FormEntrar admin />
+        </div>
+      </div>
+    </PortalShell>
+  );
+}

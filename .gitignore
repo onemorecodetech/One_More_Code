@@ -25,3 +25,5 @@ next-env.d.ts
 
 # sistema
 .DS_Store
+# dados de teste da área do cliente (clientes, propostas e PDFs)
+data/
