@@ -86,7 +86,7 @@ export async function exigirAdmin() {
 // No computador, sem variáveis, usa admin / omc-teste-123.
 export function credenciaisAdminConferem(usuario, senha) {
   const u = process.env.ADMIN_USER || (process.env.VERCEL ? null : "admin");
-  const s = process.env.ADMIN_PASSWORD || (process.env.VERCEL ? null : "omc-teste-123");
+  const s = process.env.ADMIN_PASSWORD || (process.env.VERCEL ? null : "omc-admin-2026");
   if (!u || !s) return false;
   return iguais(usuario, u) && iguais(senha, s);
 }
