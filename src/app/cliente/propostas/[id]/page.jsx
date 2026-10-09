@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import EnvioAssinatura from "@/components/portal/envio-assinatura";
+import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
 import { statusAtual, moeda, data, dataHora, linkWhatsApp, tipoDe } from "@/lib/portal/util";
 import { card, btnPrimario, btnSecundario, btnWhats } from "@/components/portal/ui";
@@ -98,6 +99,7 @@ export default async function PropostaPage({ params }) {
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-28">
+          {p.tipo === "contrato" && status === "aprovada" && <ConviteAvaliacao compacto />}
           <section className={card}>
             {p.valor > 0 ? (
               <>

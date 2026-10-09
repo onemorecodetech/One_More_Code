@@ -2,6 +2,7 @@ import Link from "next/link";
 import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
+import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
 import { statusAtual, moeda, data, linkWhatsApp } from "@/lib/portal/util";
 import { card, btnWhats } from "@/components/portal/ui";
@@ -51,6 +52,7 @@ export default async function ClientePage() {
   const contratos = docs.filter((p) => p.tipo === "contrato");
   const propostas = docs.filter((p) => p.tipo !== "contrato");
   const primeiroNome = cliente.nome.split(" ")[0];
+  const contratoConfirmado = contratos.some((p) => statusAtual(p) === "aprovada");
 
   return (
     <PortalShell>
@@ -80,6 +82,11 @@ export default async function ClientePage() {
         </div>
       ) : (
         <>
+          {contratoConfirmado && (
+            <div className="mb-10">
+              <ConviteAvaliacao />
+            </div>
+          )}
           <ListaDocumentos titulo="Contratos" docs={contratos} />
           <ListaDocumentos titulo="Propostas" docs={propostas} />
         </>
