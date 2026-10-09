@@ -107,3 +107,24 @@ export async function lerArquivo(nome) {
   if (!fs.existsSync(caminho)) return null;
   return fs.readFileSync(caminho);
 }
+
+// Apaga PDFs (usado ao excluir um documento ou um cliente).
+// Se algum arquivo já não existir, segue em frente sem erro.
+export async function apagarArquivos(nomes) {
+  const lista = nomes.filter(Boolean);
+  if (!lista.length) return;
+  const urls = lista.map((n) => n.split("|")[1]).filter(Boolean);
+  if (urls.length) {
+    try {
+      const { del } = await import("@vercel/blob");
+      await del(urls);
+    } catch (e) {
+      console.error("Não foi possível apagar PDFs do Blob:", e);
+    }
+  }
+  for (const n of lista) {
+    if (n.includes("|")) continue;
+    const caminho = path.join(FILES_DIR, path.basename(n));
+    try { fs.unlinkSync(caminho); } catch {}
+  }
+}

@@ -9,7 +9,7 @@ dist/
 
 # variáveis de ambiente
 .env
-.env*.local
+.env.local
 
 # logs
 npm-debug.log*

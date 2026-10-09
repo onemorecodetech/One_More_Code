@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { lerDB } from "@/lib/portal/storage";
-import { conferirSenha, iniciarSessao } from "@/lib/portal/auth";
+import { conferirSenha, iniciarSessao, faltaConfiguracao } from "@/lib/portal/auth";
 
 export async function POST(request) {
+  if (faltaConfiguracao()) {
+    console.error(faltaConfiguracao());
+    return NextResponse.json({ erro: "A área do cliente está em manutenção. Tente novamente mais tarde." }, { status: 503 });
+  }
   const body = await request.json().catch(() => ({}));
   const email = String(body.email || "").trim().toLowerCase();
   const db = await lerDB();

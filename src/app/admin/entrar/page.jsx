@@ -9,7 +9,7 @@ export default function AdminEntrarPage() {
   return (
     <PortalShell>
       <div className="max-w-md mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Painel de propostas</h1>
+        <h1 className="text-3xl font-bold mb-8">Propostas e contratos</h1>
         <div className={card}>
           <FormEntrar admin />
         </div>

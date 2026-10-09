@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEnvio } from "./use-envio";
 import { btnPrimario } from "./ui";
 
-export default function EnvioAssinatura({ propostaId, jaEnviada }) {
+export default function EnvioAssinatura({ propostaId, jaEnviada, nomeDoc = "proposta", artigo = "a" }) {
   const router = useRouter();
   const inputRef = useRef(null);
   const [arquivo, setArquivo] = useState(null);
@@ -77,7 +77,7 @@ export default function EnvioAssinatura({ propostaId, jaEnviada }) {
       {arquivo && (
         <div className="mt-4 flex flex-wrap gap-3">
           <button onClick={onEnviar} disabled={enviando} className={btnPrimario}>
-            {enviando ? "Enviando..." : "Enviar proposta assinada"}
+            {enviando ? "Enviando..." : `Enviar ${nomeDoc} assinad${artigo}`}
           </button>
           <button onClick={() => setArquivo(null)} disabled={enviando} className="px-4 text-sm text-white/60 hover:text-white">
             Trocar arquivo

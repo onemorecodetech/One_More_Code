@@ -5,11 +5,58 @@ import { useRouter } from "next/navigation";
 import { useEnvio } from "./use-envio";
 import { input, label, btnPrimario, btnSecundario, card } from "./ui";
 
-export default function NovaProposta({ clientes }) {
+const TEXTOS = {
+  proposta: {
+    titulo: "Nova proposta",
+    placeholderTitulo: "Site institucional com painel",
+    pdf: "PDF da proposta (até 4 MB)",
+    enviar: "Enviar proposta ao cliente",
+    sucesso: (c) => `Proposta ${c} enviada. O cliente já pode ver na área dele.`,
+  },
+  contrato: {
+    titulo: "Novo contrato",
+    placeholderTitulo: "Contrato de desenvolvimento de site",
+    pdf: "PDF do contrato (até 4 MB)",
+    enviar: "Enviar contrato ao cliente",
+    sucesso: (c) => `Contrato ${c} enviado. O cliente já pode ver na área dele.`,
+  },
+};
+
+// Formulário do admin para enviar propostas e contratos
+export default function NovaProposta({ clientes, propostas = [] }) {
   const router = useRouter();
-  const [aberto, setAberto] = useState(false);
+  const [tipo, setTipo] = useState(null); // null = fechado
+  const [clienteId, setClienteId] = useState("");
   const [sucesso, setSucesso] = useState("");
   const { enviando, erro, setErro, enviar } = useEnvio();
+  const t = TEXTOS[tipo || "proposta"];
+
+  // Propostas do cliente escolhido. Só as com assinatura confirmada
+  // e ainda sem contrato podem gerar um contrato.
+  const propostasDoCliente = propostas.filter((p) => p.clienteId === clienteId);
+  const liberadas = propostasDoCliente.filter((p) => p.status === "aprovada" && !p.contrato);
+  const bloqueadas = propostasDoCliente.filter((p) => !(p.status === "aprovada" && !p.contrato));
+  const contratoBloqueado = tipo === "contrato" && clienteId && liberadas.length === 0;
+
+  function motivo(p) {
+    if (p.contrato) return `já tem o contrato ${p.contrato}`;
+    if (p.status === "conferencia") return "assinatura aguardando sua conferência";
+    if (p.status === "aguardando") return "ainda não assinada";
+    if (p.status === "expirada") return "expirada";
+    if (p.status === "cancelada") return "cancelada";
+    return "sem assinatura confirmada";
+  }
+
+  function abrir(novoTipo) {
+    setTipo(novoTipo);
+    setSucesso("");
+    setErro("");
+  }
+
+  function fechar() {
+    setTipo(null);
+    setClienteId("");
+  }
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -22,18 +69,17 @@ export default function NovaProposta({ clientes }) {
     const ok = await enviar("/api/portal/admin/propostas", { formData: new FormData(form) });
     if (ok) {
       form.reset();
-      setSucesso(`Proposta ${ok.proposta.codigo} enviada. O cliente já pode ver na área dele.`);
-      setAberto(false);
+      setSucesso(t.sucesso(ok.proposta.codigo));
+      fechar();
       router.refresh();
     }
   }
 
-  if (!aberto) {
+  if (!tipo) {
     return (
-      <div className="flex flex-wrap items-center gap-4">
-        <button onClick={() => { setAberto(true); setSucesso(""); }} className={btnPrimario}>
-          + Nova proposta
-        </button>
+      <div className="flex flex-wrap items-center gap-3">
+        <button onClick={() => abrir("proposta")} className={btnPrimario}>+ Nova proposta</button>
+        <button onClick={() => abrir("contrato")} className={btnSecundario}>+ Novo contrato</button>
         {sucesso && <p role="status" className="text-sm text-emerald-400">{sucesso}</p>}
       </div>
     );
@@ -46,19 +92,29 @@ export default function NovaProposta({ clientes }) {
           Nenhum cliente cadastrado ainda. Peça para o cliente criar a conta em{" "}
           <span className="text-blue-400">/cliente/cadastro</span> e depois volte aqui.
         </p>
-        <button onClick={() => setAberto(false)} className={`${btnSecundario} mt-4`}>Fechar</button>
+        <button onClick={fechar} className={`${btnSecundario} mt-4`}>Fechar</button>
       </div>
     );
   }
 
+  const contrato = tipo === "contrato";
+
   return (
     <form onSubmit={onSubmit} className={`${card} space-y-5`}>
-      <h2 className="text-xl font-bold">Nova proposta</h2>
+      <input type="hidden" name="tipo" value={tipo} />
+      <h2 className="text-xl font-bold">{t.titulo}</h2>
 
       <div className="grid md:grid-cols-2 gap-5">
         <div>
           <label htmlFor="clienteId" className={label}>Cliente</label>
-          <select id="clienteId" name="clienteId" required defaultValue="" className={input}>
+          <select
+            id="clienteId"
+            name="clienteId"
+            required
+            value={clienteId}
+            onChange={(e) => setClienteId(e.target.value)}
+            className={input}
+          >
             <option value="" disabled>Selecione...</option>
             {clientes.map((c) => (
               <option key={c.id} value={c.id}>
@@ -69,36 +125,88 @@ export default function NovaProposta({ clientes }) {
         </div>
         <div>
           <label htmlFor="titulo" className={label}>Título</label>
-          <input id="titulo" name="titulo" required placeholder="Site institucional com painel" className={input} />
+          <input id="titulo" name="titulo" required placeholder={t.placeholderTitulo} className={input} />
         </div>
       </div>
 
+      {contrato && (
+        <div>
+          <label htmlFor="propostaRelacionada" className={label}>Referente à proposta</label>
+          <select
+            key={clienteId}
+            id="propostaRelacionada"
+            name="propostaRelacionada"
+            required
+            defaultValue=""
+            className={input}
+            disabled={!clienteId || liberadas.length === 0}
+          >
+            <option value="" disabled>
+              {!clienteId ? "Escolha o cliente primeiro" : liberadas.length ? "Selecione a proposta assinada..." : "Nenhuma proposta liberada"}
+            </option>
+            {liberadas.map((p) => (
+              <option key={p.id} value={p.id}>{p.codigo} · {p.titulo}</option>
+            ))}
+          </select>
+
+          <p className="mt-2 text-sm text-white/50">
+            O contrato só pode ser gerado a partir de uma proposta assinada pelo cliente e com a
+            assinatura confirmada por você.
+          </p>
+
+          {contratoBloqueado && (
+            <div className="mt-3 rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm text-amber-200">
+              {propostasDoCliente.length === 0 ? (
+                <p>Este cliente ainda não tem nenhuma proposta. Envie a proposta primeiro.</p>
+              ) : (
+                <>
+                  <p className="mb-2">Nenhuma proposta deste cliente está liberada para contrato:</p>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {bloqueadas.map((p) => (
+                      <li key={p.id}>{p.codigo} · {p.titulo}: {motivo(p)}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div>
         <label htmlFor="resumo" className={label}>Resumo para o cliente</label>
-        <textarea id="resumo" name="resumo" rows={3} placeholder="O que está incluso, em poucas linhas." className={`${input} resize-none`} />
+        <textarea
+          id="resumo"
+          name="resumo"
+          rows={3}
+          placeholder={contrato ? "Principais pontos do contrato, em poucas linhas." : "O que está incluso, em poucas linhas."}
+          className={`${input} resize-none`}
+        />
       </div>
 
       <div className="grid md:grid-cols-4 gap-5">
         <div>
-          <label htmlFor="valor" className={label}>Valor (R$)</label>
-          <input id="valor" name="valor" required inputMode="decimal" placeholder="1.500,00" className={input} />
+          <label htmlFor="valor" className={label}>
+            Valor (R$) {contrato && <span className="text-white/40">(opcional)</span>}
+          </label>
+          <input id="valor" name="valor" required={!contrato} inputMode="decimal" placeholder="1.500,00" className={input} />
         </div>
         <div>
           <label htmlFor="condicoes" className={label}>Condições</label>
           <input id="condicoes" name="condicoes" placeholder="50% entrada + 50% entrega" className={input} />
         </div>
         <div>
-          <label htmlFor="prazo" className={label}>Prazo de entrega</label>
-          <input id="prazo" name="prazo" placeholder="15 dias úteis" className={input} />
+          <label htmlFor="prazo" className={label}>{contrato ? "Vigência / prazo" : "Prazo de entrega"}</label>
+          <input id="prazo" name="prazo" placeholder={contrato ? "12 meses" : "15 dias úteis"} className={input} />
         </div>
         <div>
-          <label htmlFor="validade" className={label}>Válida até</label>
+          <label htmlFor="validade" className={label}>Assinar até</label>
           <input id="validade" name="validade" type="date" className={input} />
         </div>
       </div>
 
       <div>
-        <label htmlFor="arquivo" className={label}>PDF da proposta (até 4 MB)</label>
+        <label htmlFor="arquivo" className={label}>{t.pdf}</label>
         <input
           id="arquivo"
           name="arquivo"
@@ -112,10 +220,10 @@ export default function NovaProposta({ clientes }) {
       {erro && <p role="alert" className="text-sm text-red-400">{erro}</p>}
 
       <div className="flex flex-wrap gap-3">
-        <button type="submit" disabled={enviando} className={btnPrimario}>
-          {enviando ? "Enviando..." : "Enviar proposta ao cliente"}
+        <button type="submit" disabled={enviando || contratoBloqueado} className={btnPrimario}>
+          {enviando ? "Enviando..." : t.enviar}
         </button>
-        <button type="button" onClick={() => setAberto(false)} disabled={enviando} className={btnSecundario}>
+        <button type="button" onClick={fechar} disabled={enviando} className={btnSecundario}>
           Cancelar
         </button>
       </div>

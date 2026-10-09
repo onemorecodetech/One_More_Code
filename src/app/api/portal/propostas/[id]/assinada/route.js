@@ -2,7 +2,7 @@
 import { NextResponse } from "next/server";
 import { lerDB, salvarDB, salvarArquivo } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
-import { ehPdf, LIMITE_PDF, statusAtual } from "@/lib/portal/util";
+import { ehPdf, LIMITE_PDF, statusAtual, tipoDe } from "@/lib/portal/util";
 
 export async function POST(request, contexto) {
   try {
@@ -22,11 +22,11 @@ async function enviarAssinada(request, { params }) {
 
   const db = await lerDB();
   const proposta = db.propostas.find((p) => p.id === params.id && p.clienteId === sessao.id);
-  if (!proposta) return NextResponse.json({ erro: "Proposta não encontrada." }, { status: 404 });
+  if (!proposta) return NextResponse.json({ erro: "Documento não encontrado." }, { status: 404 });
 
   const status = statusAtual(proposta);
   if (!["aguardando", "conferencia"].includes(status)) {
-    return NextResponse.json({ erro: "Esta proposta não aceita mais envio de assinatura." }, { status: 400 });
+    return NextResponse.json({ erro: "Este documento não aceita mais envio de assinatura." }, { status: 400 });
   }
 
   const form = await request.formData();
@@ -40,7 +40,8 @@ async function enviarAssinada(request, { params }) {
   proposta.arquivoAssinado = await salvarArquivo(`${proposta.id}-assinada-${Date.now()}.pdf`, buffer);
   proposta.assinadaEm = new Date().toISOString();
   proposta.status = "conferencia";
-  proposta.historico.push({ em: proposta.assinadaEm, texto: "Cliente enviou a proposta assinada" });
+  const T = tipoDe(proposta);
+  proposta.historico.push({ em: proposta.assinadaEm, texto: `Cliente enviou ${T.artigo} ${T.nome.toLowerCase()} assinad${T.artigo}` });
   await salvarDB(db);
 
   return NextResponse.json({ ok: true });

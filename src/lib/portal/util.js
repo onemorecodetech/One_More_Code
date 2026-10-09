@@ -1,10 +1,28 @@
 export const STATUS = {
   aguardando: { label: "Aguardando assinatura", cor: "text-amber-300 bg-amber-400/10 border-amber-400/30" },
-  conferencia: { label: "Assinada, em conferência", cor: "text-blue-300 bg-blue-400/10 border-blue-400/30" },
+  conferencia: { label: "Assinatura em conferência", cor: "text-blue-300 bg-blue-400/10 border-blue-400/30" },
   aprovada: { label: "Assinatura confirmada", cor: "text-emerald-300 bg-emerald-400/10 border-emerald-400/30" },
   cancelada: { label: "Cancelada", cor: "text-white/50 bg-white/5 border-white/15" },
   expirada: { label: "Expirada", cor: "text-red-300 bg-red-400/10 border-red-400/30" },
 };
+
+// Tipos de documento: propostas e contratos seguem o mesmo fluxo de assinatura
+export const TIPOS = {
+  proposta: { nome: "Proposta", plural: "Propostas", artigo: "a", prefixo: "OMC" },
+  contrato: { nome: "Contrato", plural: "Contratos", artigo: "o", prefixo: "CTR" },
+};
+
+// Documentos antigos (sem tipo) são propostas
+export const tipoDe = (doc) => TIPOS[doc?.tipo] || TIPOS.proposta;
+
+// Ajusta o gênero de "Cancelada/Cancelado" e "Expirada/Expirado"
+export function rotuloStatus(status, doc) {
+  const base = (STATUS[status] || STATUS.aguardando).label;
+  if (tipoDe(doc).artigo === "o" && (status === "cancelada" || status === "expirada")) {
+    return base.slice(0, -1) + "o";
+  }
+  return base;
+}
 
 // "aguardando" vira "expirada" depois da data de validade
 export function statusAtual(proposta) {

@@ -1,10 +1,14 @@
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { lerDB, salvarDB } from "@/lib/portal/storage";
-import { hashSenha, iniciarSessao } from "@/lib/portal/auth";
+import { hashSenha, iniciarSessao, faltaConfiguracao } from "@/lib/portal/auth";
 import { texto } from "@/lib/portal/util";
 
 export async function POST(request) {
+  if (faltaConfiguracao()) {
+    console.error(faltaConfiguracao());
+    return NextResponse.json({ erro: "A área do cliente está em manutenção. Tente novamente mais tarde." }, { status: 503 });
+  }
   const body = await request.json().catch(() => ({}));
   const nome = texto(body.nome, 120);
   const email = texto(body.email, 160).toLowerCase();

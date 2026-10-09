@@ -7,10 +7,19 @@ import { lerDB } from "./storage";
 const COOKIE = "omc_sessao";
 const DURACAO = 60 * 60 * 24 * 7; // 7 dias, em segundos
 
-// Em produção, SESSION_SECRET é obrigatório. No computador, usa uma chave de teste.
-const SECRET =
-  process.env.SESSION_SECRET ||
-  (process.env.VERCEL ? null : "chave-local-somente-para-testes-troque-em-producao");
+// Nenhuma senha ou chave fica escrita no código: tudo vem de variáveis de ambiente.
+// Na Vercel: Settings > Environment Variables. No computador: arquivo .env.local.
+const SECRET = process.env.SESSION_SECRET || null;
+
+// Mensagem clara quando falta alguma configuração (null = tudo certo)
+export function faltaConfiguracao({ admin = false } = {}) {
+  const faltando = [];
+  if (!SECRET || SECRET.length < 32) faltando.push("SESSION_SECRET (mínimo 32 caracteres)");
+  if (admin && !process.env.ADMIN_USER) faltando.push("ADMIN_USER");
+  if (admin && !process.env.ADMIN_PASSWORD) faltando.push("ADMIN_PASSWORD");
+  if (!faltando.length) return null;
+  return `Login não configurado. Falta: ${faltando.join(", ")}. Cadastre nas variáveis de ambiente (ou no .env.local, no computador).`;
+}
 
 export function hashSenha(senha) {
   const salt = crypto.randomBytes(16).toString("hex");
@@ -66,6 +75,15 @@ export function lerSessao() {
   }
 }
 
+// Devolve o cliente logado, ou null se não houver sessão
+// ou se o cliente foi excluído (a sessão antiga deixa de valer)
+export async function clienteLogado() {
+  const sessao = lerSessao();
+  if (sessao?.tipo !== "cliente") return null;
+  const db = await lerDB();
+  return db.clientes.find((c) => c.id === sessao.id) || null;
+}
+
 // Usado nas páginas: devolve o cliente logado ou manda para o login
 export async function exigirCliente() {
   const sessao = lerSessao();
@@ -82,11 +100,10 @@ export async function exigirAdmin() {
   return { db: await lerDB() };
 }
 
-// Login do admin: variáveis ADMIN_USER e ADMIN_PASSWORD.
-// No computador, sem variáveis, usa admin / omc-teste-123.
+// Login do admin: somente pelas variáveis ADMIN_USER e ADMIN_PASSWORD
 export function credenciaisAdminConferem(usuario, senha) {
-  const u = process.env.ADMIN_USER || (process.env.VERCEL ? null : "admin");
-  const s = process.env.ADMIN_PASSWORD || (process.env.VERCEL ? null : "omc-admin-2026");
+  const u = process.env.ADMIN_USER;
+  const s = process.env.ADMIN_PASSWORD;
   if (!u || !s) return false;
   return iguais(usuario, u) && iguais(senha, s);
 }

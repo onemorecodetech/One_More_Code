@@ -8,7 +8,7 @@ const BOTOES = {
     { acao: "confirmar", texto: "Confirmar assinatura", estilo: "bg-emerald-500 hover:bg-emerald-600 text-white" },
     { acao: "reenviar", texto: "Pedir novo envio", estilo: "border border-white/15 hover:border-amber-400 hover:text-amber-300" },
   ],
-  aguardando: [{ acao: "cancelar", texto: "Cancelar proposta", estilo: "border border-white/15 hover:border-red-400 hover:text-red-300" }],
+  aguardando: [{ acao: "cancelar", texto: "Cancelar", estilo: "border border-white/15 hover:border-red-400 hover:text-red-300" }],
   expirada: [{ acao: "reabrir", texto: "Reabrir", estilo: "border border-white/15 hover:border-blue-400 hover:text-blue-300" }],
   cancelada: [{ acao: "reabrir", texto: "Reabrir", estilo: "border border-white/15 hover:border-blue-400 hover:text-blue-300" }],
 };
@@ -19,7 +19,7 @@ export default function AcoesProposta({ id, status }) {
   const botoes = BOTOES[status] || [];
 
   async function executar(acao) {
-    if (acao === "cancelar" && !confirm("Cancelar esta proposta?")) return;
+    if (acao === "cancelar" && !confirm("Cancelar este documento? O cliente deixa de poder assiná-lo.")) return;
     const ok = await enviar(`/api/portal/admin/propostas/${id}`, { method: "PATCH", json: { acao } });
     if (ok) router.refresh();
   }
