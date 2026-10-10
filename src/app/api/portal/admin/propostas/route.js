@@ -15,7 +15,7 @@ export async function POST(request) {
 }
 
 async function criarProposta(request) {
-  if (lerSessao()?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+  if ((await lerSessao())?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const form = await request.formData();
   const db = await lerDB();

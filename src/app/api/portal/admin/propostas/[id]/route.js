@@ -11,8 +11,9 @@ const ACOES = {
   reabrir: { status: "aguardando", texto: (T) => `${T.nome} reabert${T.artigo} para assinatura` },
 };
 
-export async function PATCH(request, { params }) {
-  if (lerSessao()?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+export async function PATCH(request, contexto) {
+  const params = await contexto.params;
+  if ((await lerSessao())?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const { acao } = await request.json().catch(() => ({}));
   const regra = ACOES[acao];
@@ -29,8 +30,9 @@ export async function PATCH(request, { params }) {
 }
 
 // Exclui um documento e os PDFs dele
-export async function DELETE(request, { params }) {
-  if (lerSessao()?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+export async function DELETE(request, contexto) {
+  const params = await contexto.params;
+  if ((await lerSessao())?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const db = await lerDB();
   const doc = db.propostas.find((p) => p.id === params.id);

@@ -16,8 +16,9 @@ export async function POST(request, contexto) {
   }
 }
 
-async function enviarAssinada(request, { params }) {
-  const sessao = lerSessao();
+async function enviarAssinada(request, contexto) {
+  const params = await contexto.params;
+  const sessao = await lerSessao();
   if (sessao?.tipo !== "cliente") return NextResponse.json({ erro: "Faça login novamente." }, { status: 401 });
 
   const db = await lerDB();

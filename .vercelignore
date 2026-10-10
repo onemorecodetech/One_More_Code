@@ -1,0 +1,9 @@
+# Arquivos que NUNCA devem ser enviados à Vercel num deploy pelo computador (vercel --prod)
+.env
+.env.*
+!.env.example
+!.env.local.example
+data/
+exemplos/
+node_modules/
+.next/

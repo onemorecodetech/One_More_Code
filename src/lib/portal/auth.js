@@ -44,12 +44,12 @@ function assinar(valor) {
   return crypto.createHmac("sha256", SECRET).update(valor).digest("base64url");
 }
 
-export function iniciarSessao(dados) {
+export async function iniciarSessao(dados) {
   if (!SECRET) throw new Error("SESSION_SECRET não configurado");
   const payload = Buffer.from(
     JSON.stringify({ ...dados, exp: Date.now() + DURACAO * 1000 })
   ).toString("base64url");
-  cookies().set(COOKIE, `${payload}.${assinar(payload)}`, {
+  (await cookies()).set(COOKIE, `${payload}.${assinar(payload)}`, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -58,12 +58,12 @@ export function iniciarSessao(dados) {
   });
 }
 
-export function encerrarSessao() {
-  cookies().set(COOKIE, "", { path: "/", maxAge: 0 });
+export async function encerrarSessao() {
+  (await cookies()).set(COOKIE, "", { path: "/", maxAge: 0 });
 }
 
-export function lerSessao() {
-  const token = cookies().get(COOKIE)?.value;
+export async function lerSessao() {
+  const token = (await cookies()).get(COOKIE)?.value;
   if (!SECRET || !token) return null;
   const [payload, assinatura] = token.split(".");
   if (!payload || !assinatura || !iguais(assinatura, assinar(payload))) return null;
@@ -78,7 +78,7 @@ export function lerSessao() {
 // Devolve o cliente logado, ou null se não houver sessão
 // ou se o cliente foi excluído (a sessão antiga deixa de valer)
 export async function clienteLogado() {
-  const sessao = lerSessao();
+  const sessao = await lerSessao();
   if (sessao?.tipo !== "cliente") return null;
   const db = await lerDB();
   return db.clientes.find((c) => c.id === sessao.id) || null;
@@ -86,7 +86,7 @@ export async function clienteLogado() {
 
 // Usado nas páginas: devolve o cliente logado ou manda para o login
 export async function exigirCliente() {
-  const sessao = lerSessao();
+  const sessao = await lerSessao();
   if (sessao?.tipo !== "cliente") redirect("/cliente/entrar");
   const db = await lerDB();
   const cliente = db.clientes.find((c) => c.id === sessao.id);
@@ -95,7 +95,7 @@ export async function exigirCliente() {
 }
 
 export async function exigirAdmin() {
-  const sessao = lerSessao();
+  const sessao = await lerSessao();
   if (sessao?.tipo !== "admin") redirect("/admin/entrar");
   return { db: await lerDB() };
 }

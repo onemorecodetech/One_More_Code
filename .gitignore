@@ -27,3 +27,5 @@ next-env.d.ts
 .DS_Store
 # dados de teste da área do cliente (clientes, propostas e PDFs)
 data/
+.vercel
+.env*

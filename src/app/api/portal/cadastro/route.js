@@ -3,12 +3,18 @@ import { NextResponse } from "next/server";
 import { lerDB, salvarDB } from "@/lib/portal/storage";
 import { hashSenha, iniciarSessao, faltaConfiguracao } from "@/lib/portal/auth";
 import { texto } from "@/lib/portal/util";
+import { ipDe, registrarTentativa } from "@/lib/portal/limite";
 
 export async function POST(request) {
   if (faltaConfiguracao()) {
     console.error(faltaConfiguracao());
     return NextResponse.json({ erro: "A área do cliente está em manutenção. Tente novamente mais tarde." }, { status: 503 });
   }
+  const limite = await registrarTentativa(`cadastro:${ipDe(request)}`, { maximo: 5, minutos: 60 });
+  if (limite.bloqueado) {
+    return NextResponse.json({ erro: "Muitos cadastros seguidos. Tente de novo mais tarde." }, { status: 429 });
+  }
+
   const body = await request.json().catch(() => ({}));
   const nome = texto(body.nome, 120);
   const email = texto(body.email, 160).toLowerCase();
@@ -39,6 +45,6 @@ export async function POST(request) {
   db.clientes.push(cliente);
   await salvarDB(db);
 
-  iniciarSessao({ tipo: "cliente", id: cliente.id });
+  await iniciarSessao({ tipo: "cliente", id: cliente.id });
   return NextResponse.json({ ok: true });
 }

@@ -2,8 +2,9 @@
 import { lerDB, lerArquivo } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 
-export async function GET(request, { params }) {
-  const sessao = lerSessao();
+export async function GET(request, contexto) {
+  const params = await contexto.params;
+  const sessao = await lerSessao();
   if (!sessao) return new Response("Não autorizado", { status: 401 });
 
   const db = await lerDB();

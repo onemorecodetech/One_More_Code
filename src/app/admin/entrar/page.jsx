@@ -4,8 +4,8 @@ import FormEntrar from "@/components/portal/form-entrar";
 import { lerSessao } from "@/lib/portal/auth";
 import { card } from "@/components/portal/ui";
 
-export default function AdminEntrarPage() {
-  if (lerSessao()?.tipo === "admin") redirect("/admin");
+export default async function AdminEntrarPage() {
+  if ((await lerSessao())?.tipo === "admin") redirect("/admin");
   return (
     <PortalShell>
       <div className="max-w-md mx-auto">

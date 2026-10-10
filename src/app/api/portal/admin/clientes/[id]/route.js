@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 import { lerDB, salvarDB, apagarArquivos } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 
-export async function DELETE(request, { params }) {
-  if (lerSessao()?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
+export async function DELETE(request, contexto) {
+  const params = await contexto.params;
+  if ((await lerSessao())?.tipo !== "admin") return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
 
   const db = await lerDB();
   const cliente = db.clientes.find((c) => c.id === params.id);

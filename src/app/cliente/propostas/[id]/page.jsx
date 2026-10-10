@@ -17,7 +17,8 @@ const passos = (nome) => [
   "Baixe o arquivo assinado e envie aqui embaixo.",
 ];
 
-export default async function PropostaPage({ params }) {
+export default async function PropostaPage(props) {
+  const params = await props.params;
   const { cliente, db } = await exigirCliente();
   const p = db.propostas.find((x) => x.id === params.id && x.clienteId === cliente.id);
   if (!p) notFound();
