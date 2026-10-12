@@ -5,6 +5,7 @@ import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import EnvioAssinatura from "@/components/portal/envio-assinatura";
 import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
+import { publicarSeguro } from "@/lib/notificacoes/central";
 import { statusAtual, moeda, data, dataHora, linkWhatsApp, tipoDe } from "@/lib/portal/util";
 import { card, btnPrimario, btnSecundario, btnWhats } from "@/components/portal/ui";
 
@@ -24,6 +25,10 @@ export default async function PropostaPage(props) {
   if (!p) notFound();
 
   const status = statusAtual(p);
+  await publicarSeguro("documento.visualizado", {
+    chave: `visualizado:${p.id}`,
+    dados: { id: p.id, codigo: p.codigo, titulo: p.titulo, tipoDoc: p.tipo || "proposta", nomeCliente: cliente.nome },
+  });
   const podeEnviar = status === "aguardando" || status === "conferencia";
   const pdf = `/api/portal/arquivos/${p.id}/original`;
   const T = tipoDe(p);

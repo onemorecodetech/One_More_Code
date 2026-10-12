@@ -1,5 +1,6 @@
 // O cliente envia o PDF assinado pelo gov.br
 import { NextResponse } from "next/server";
+import { publicarSeguro, processarDepois } from "@/lib/notificacoes/central";
 import { lerDB, salvarDB, salvarArquivo } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 import { ehPdf, LIMITE_PDF, statusAtual, tipoDe } from "@/lib/portal/util";
@@ -44,6 +45,12 @@ async function enviarAssinada(request, contexto) {
   const T = tipoDe(proposta);
   proposta.historico.push({ em: proposta.assinadaEm, texto: `Cliente enviou ${T.artigo} ${T.nome.toLowerCase()} assinad${T.artigo}` });
   await salvarDB(db);
+  const cliente = db.clientes.find((c) => c.id === proposta.clienteId);
+  await publicarSeguro("documento.assinatura_enviada", {
+    chave: `assinatura:${proposta.id}:${proposta.assinadaEm}`, clienteId: proposta.clienteId,
+    dados: { id: proposta.id, codigo: proposta.codigo, titulo: proposta.titulo, tipoDoc: proposta.tipo || "proposta", nomeCliente: cliente?.nome || "Cliente" },
+  });
+  await processarDepois();
 
   return NextResponse.json({ ok: true });
 }

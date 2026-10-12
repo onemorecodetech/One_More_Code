@@ -1,5 +1,6 @@
 // Admin muda o status: confirmar assinatura, pedir novo envio, cancelar ou reabrir
 import { NextResponse } from "next/server";
+import { publicarSeguro, processarDepois } from "@/lib/notificacoes/central";
 import { lerDB, salvarDB, apagarArquivos } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 import { tipoDe } from "@/lib/portal/util";
@@ -26,6 +27,13 @@ export async function PATCH(request, contexto) {
   doc.status = regra.status;
   doc.historico.push({ em: new Date().toISOString(), texto: regra.texto(tipoDe(doc)) });
   await salvarDB(db);
+  const EVENTO = { confirmar: "documento.assinatura_confirmada", reenviar: "documento.novo_envio_solicitado", cancelar: "documento.cancelado", reabrir: "documento.reaberto" }[acao];
+  const cliente = db.clientes.find((c) => c.id === doc.clienteId);
+  await publicarSeguro(EVENTO, {
+    chave: `${acao}:${doc.id}:${doc.historico.length}`, clienteId: doc.clienteId,
+    dados: { id: doc.id, codigo: doc.codigo, titulo: doc.titulo, tipoDoc: doc.tipo || "proposta", nomeCliente: cliente?.nome || "Cliente" },
+  });
+  await processarDepois();
   return NextResponse.json({ ok: true });
 }
 

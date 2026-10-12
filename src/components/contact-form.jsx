@@ -1,62 +1,89 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const inputClass =
-  "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-4 py-3.5 text-base text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 disabled:opacity-60";
-  
+  "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-4 py-3.5 text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 disabled:opacity-60";
+
+// Faz uma requisição com limite de tempo
+async function comTempo(url, opcoes, ms = 12000) {
+  const controle = new AbortController();
+  const timer = setTimeout(() => controle.abort(), ms);
+  try {
+    return await fetch(url, { ...opcoes, signal: controle.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
   const [feedback, setFeedback] = useState("");
+  // Identificador do envio: o mesmo em novas tentativas da mesma mensagem (evita duplicidade)
+  const idEnvio = useRef(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
+    if (status === "sending") return;
     const form = event.currentTarget;
     const data = new FormData(form);
+    const nome = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const mensagem = String(data.get("message") || "").trim();
+    const botcheck = data.get("botcheck") ? "on" : "";
+    if (!idEnvio.current) idEnvio.current = crypto.randomUUID();
 
-    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "e3920951-c234-4390-b36c-25ffe82a2f6b";
-    if (!accessKey) {
-      setStatus("error");
-      setFeedback(
-        "O formulário ainda não está configurado. Escreva para contato@onemorecode.tech."
-      );
-      return;
-    }
+    const accessKey =
+      process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "e3920951-c234-4390-b36c-25ffe82a2f6b";
 
     setStatus("sending");
     setFeedback("");
 
+    // 1) Web3Forms (pelo navegador, como exige o plano gratuito)
+    let web3forms = "incerto";
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await comTempo("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: accessKey,
-          subject: `Novo contato pelo site: ${data.get("name")}`,
+          subject: `Novo contato pelo site: ${nome}`,
           from_name: "Site OneMoreCode",
-          name: data.get("name"),
-          email: data.get("email"),
-          message: data.get("message"),
-          botcheck: data.get("botcheck"),
+          name: nome,
+          email,
+          message: mensagem,
+          botcheck,
         }),
       });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Falha no envio");
-      }
-
-      form.reset();
-      setStatus("success");
-      setFeedback("Mensagem enviada. Respondemos em até 1 dia útil.");
+      const result = await response.json().catch(() => ({}));
+      web3forms = response.ok && result.success ? "ok" : "falhou";
     } catch {
+      web3forms = "incerto"; // sem resposta: não dá para saber se chegou
+    }
+
+    // 2) Nosso servidor: resposta automática, aviso no painel e reserva pelo Resend
+    let servidorOk = false;
+    let erroServidor = "";
+    try {
+      const r = await comTempo("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, email, mensagem, botcheck, web3forms, idEnvio: idEnvio.current }),
+      });
+      servidorOk = r.ok;
+      if (!r.ok) erroServidor = (await r.json().catch(() => ({}))).erro || "";
+    } catch {}
+
+    if (web3forms === "ok" || servidorOk) {
+      form.reset();
+      idEnvio.current = null;
+      setStatus("success");
+      setFeedback("Mensagem enviada! Em breve entraremos em contato.");
+    } else {
       setStatus("error");
       setFeedback(
-        "Não foi possível enviar agora. Tente de novo ou escreva para contato@onemorecode.tech."
+        erroServidor ||
+          "Não foi possível enviar agora. Tente de novo em instantes ou chame no WhatsApp."
       );
     }
   }
@@ -87,6 +114,7 @@ export default function ContactForm() {
           type="text"
           required
           minLength={2}
+          maxLength={100}
           autoComplete="name"
           placeholder="Seu nome"
           disabled={sending}
@@ -101,6 +129,7 @@ export default function ContactForm() {
         <input
           id="email"
           name="email"
+          maxLength={160}
           type="email"
           required
           autoComplete="email"
@@ -120,6 +149,7 @@ export default function ContactForm() {
           rows={5}
           required
           minLength={10}
+          maxLength={4000}
           placeholder="Conte um pouco sobre o seu projeto..."
           disabled={sending}
           className={`${inputClass} resize-none`}

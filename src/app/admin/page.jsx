@@ -1,6 +1,7 @@
 import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
+import Sino from "@/components/portal/sino";
 import NovaProposta from "@/components/portal/nova-proposta";
 import AcoesProposta from "@/components/portal/acoes-proposta";
 import BotaoExcluir from "@/components/portal/botao-excluir";
@@ -33,7 +34,10 @@ export default async function AdminPage() {
     <PortalShell>
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <h1 className="text-3xl md:text-4xl font-bold">Propostas e contratos</h1>
-        <BotaoSair destino="/admin/entrar" />
+        <div className="flex items-center gap-4">
+          <Sino pagina="/admin/notificacoes" />
+          <BotaoSair destino="/admin/entrar" />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

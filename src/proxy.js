@@ -22,5 +22,5 @@ export function proxy(request) {
 }
 
 export const config = {
-  matcher: "/api/portal/:path*",
+  matcher: ["/api/portal/:path*", "/api/contact"],
 };

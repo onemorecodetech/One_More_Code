@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { lerDB, salvarDB, apagarArquivos } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
+import * as kv from "@/lib/kv";
 
 export async function DELETE(request, contexto) {
   const params = await contexto.params;
@@ -16,6 +17,9 @@ export async function DELETE(request, contexto) {
   db.propostas = db.propostas.filter((p) => p.clienteId !== cliente.id);
   await salvarDB(db);
   await apagarArquivos(docs.flatMap((d) => [d.arquivoOriginal, d.arquivoAssinado]));
+  // Apaga também os avisos e preferências do cliente (LGPD)
+  await kv.del(`omc:notif:cliente:${cliente.id}`).catch(() => {});
+  await kv.del(`omc:pref:cliente:${cliente.id}`).catch(() => {});
 
   return NextResponse.json({ ok: true, documentos: docs.length });
 }

@@ -1,6 +1,7 @@
 // Admin cadastra uma nova proposta ou contrato para um cliente
 import crypto from "crypto";
 import { NextResponse } from "next/server";
+import { publicarSeguro, processarDepois } from "@/lib/notificacoes/central";
 import { lerDB, salvarDB, salvarArquivo } from "@/lib/portal/storage";
 import { lerSessao } from "@/lib/portal/auth";
 import { ehPdf, LIMITE_PDF, texto, TIPOS, statusAtual } from "@/lib/portal/util";
@@ -101,5 +102,10 @@ async function criarProposta(request) {
 
   db.propostas.push(proposta);
   await salvarDB(db);
+  await publicarSeguro("documento.disponivel", {
+    chave: `disponivel:${id}`, clienteId,
+    dados: { id, codigo: proposta.codigo, titulo, tipoDoc: tipo },
+  });
+  await processarDepois();
   return NextResponse.json({ ok: true, proposta: { id, codigo: proposta.codigo } });
 }

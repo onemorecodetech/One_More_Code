@@ -2,6 +2,7 @@ import Link from "next/link";
 import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
+import Sino from "@/components/portal/sino";
 import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
 import { statusAtual, moeda, data, linkWhatsApp } from "@/lib/portal/util";
@@ -61,7 +62,10 @@ export default async function ClientePage() {
           <p className="text-blue-400 text-sm uppercase tracking-widest mb-3">Área do cliente</p>
           <h1 className="text-3xl md:text-4xl font-bold">Olá, {primeiroNome}</h1>
         </div>
-        <BotaoSair />
+        <div className="flex items-center gap-4">
+          <Sino pagina="/cliente/notificacoes" />
+          <BotaoSair />
+        </div>
       </div>
 
       {docs.length === 0 ? (

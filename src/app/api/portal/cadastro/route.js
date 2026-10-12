@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { NextResponse } from "next/server";
 import { lerDB, salvarDB } from "@/lib/portal/storage";
 import { hashSenha, iniciarSessao, faltaConfiguracao } from "@/lib/portal/auth";
+import { publicarSeguro, processarDepois } from "@/lib/notificacoes/central";
 import { texto } from "@/lib/portal/util";
 import { ipDe, registrarTentativa } from "@/lib/portal/limite";
 
@@ -46,5 +47,8 @@ export async function POST(request) {
   await salvarDB(db);
 
   await iniciarSessao({ tipo: "cliente", id: cliente.id });
+  // Boas-vindas ao cliente e aviso ao admin (falha no e-mail não afeta o cadastro)
+  await publicarSeguro("cliente.cadastrado", { chave: `cadastro:${cliente.id}`, clienteId: cliente.id, dados: { nome, email } });
+  await processarDepois();
   return NextResponse.json({ ok: true });
 }
