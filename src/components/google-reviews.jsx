@@ -44,11 +44,11 @@ export default function GoogleReviews() {
               </div>
 
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                O que dizem sobre a OneMoreCode
+                Avaliações dos nossos clientes
               </h2>
               <p className="text-white/70 max-w-2xl leading-relaxed">
-                Veja as avaliações de quem já tirou o projeto do papel com a gente. Se você
-                já é cliente, sua opinião ajuda outras empresas a nos encontrar.
+                Confira no Google as avaliações de quem já desenvolveu um projeto conosco.
+                Se você já é cliente, sua avaliação nos ajuda a chegar a mais empresas.
               </p>
             </div>
 

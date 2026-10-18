@@ -15,9 +15,9 @@ export default function Contact() {
           </h2>
 
           <p className="text-white/70 leading-relaxed mb-8">
-            Entre em contato com a OneMoreCode para desenvolver seu site, sistema,
-            aplicativo ou automação. Vamos construir algo moderno e estratégico
-            para o seu negócio.
+            Conte para nós o que você tem em mente. Mesmo que seja apenas uma ideia
+            inicial, ajudamos a dar forma a ela e a encontrar o melhor caminho para
+            o seu negócio.
           </p>
 
           <div className="space-y-4 text-white/80">

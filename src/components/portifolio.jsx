@@ -13,7 +13,7 @@ const projects = [
     title: "Studio Alessandra",
     category: "Site + painel administrativo",
     description:
-      "Site para uma nail designer com serviços, valores e horários que a própria cliente atualiza por um painel administrativo. Inclui agendamento direto pelo WhatsApp, indicador de aberto ou fechado em tempo real e SEO para buscas locais.",
+      "Site para uma nail designer apresentar seus serviços, valores e horários. A própria profissional atualiza o conteúdo por um painel administrativo simples, e as clientes agendam diretamente pelo aplicativo de agendamento. O site também indica, em tempo real, se o studio está aberto.",
     image: "/images/portfolio/studio-alessandra.jpg",
     url: "https://www.studioalenails.com.br",
     tags: ["Node.js", "Express", "Vercel", "Redis", "Painel admin", "SEO"],
@@ -106,9 +106,9 @@ export default function Portfolio() {
               Projetos entregues
             </h2>
             <p className="text-white/70 max-w-2xl">
-              Cada projeto é pensado para o negócio do cliente: visual com
-              identidade própria, autonomia para atualizar o conteúdo e
-              estrutura para ser encontrado no Google.
+              Cada negócio tem necessidades próprias, e cada projeto é desenvolvido
+              para atendê-las. Estes já estão no ar e fazem parte da rotina dos
+              nossos clientes.
             </p>
           </div>
 
@@ -218,7 +218,7 @@ export default function Portfolio() {
               Seu projeto pode ser o próximo
             </h3>
             <p className="text-white/70">
-              Sites, sistemas, aplicativos e automações sob medida.
+              Conte sua ideia e prepararemos um orçamento sob medida.
             </p>
           </div>
           <a
