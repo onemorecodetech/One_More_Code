@@ -285,6 +285,11 @@ function Reunioes() {
   if (!d) return <p className="text-white/50">Carregando...</p>;
   const nome = Object.fromEntries(d.leads.map((l) => [l.id, l.nome]));
   const lista = [...d.reunioes].sort((a, b) => b.quando.localeCompare(a.quando));
+  async function excluir(r) {
+    if (!confirm(`Excluir a reunião "${r.titulo}" de ${dataBR(r.quando)}? Isso não pode ser desfeito.`)) return;
+    try { await api("/api/portal/admin/crm/itens", { method: "DELETE", body: { tipo: "reuniao", id: r.id } }); } catch (e) { alert(e.message); }
+    carregar();
+  }
   async function followUp(r) {
     await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "atividade", dados: { titulo: `Acompanhar após reunião: ${r.titulo}`, leadId: r.leadId || "", quando: `${hojeBR()}T09:00`, prioridade: "alta" } } });
     alert("Atividade de acompanhamento criada para hoje às 09:00.");
@@ -302,6 +307,7 @@ function Reunioes() {
             <div className="flex gap-2">
               {r.status === "realizada" && <button onClick={() => followUp(r)} className={btnLinha}>Criar acompanhamento</button>}
               <button onClick={() => setModal(r)} className={btnLinha}>Editar</button>
+              <button onClick={() => excluir(r)} aria-label={`Excluir reunião ${r.titulo}`} className={`${btnLinha} hover:!border-red-400 hover:!text-red-300`}>Excluir</button>
             </div>
           </li>))}
         </ul>

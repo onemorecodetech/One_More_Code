@@ -27,6 +27,10 @@ export default function LeadDetalhe({ id }) {
     if (!confirm(`Excluir "${l.nome}" de vez? O histórico, as atividades e as reuniões dela também serão apagados.`)) return;
     try { await api(`/api/portal/admin/crm/${id}`, { method: "DELETE" }); window.location.href = "/admin/crm"; } catch (e) { setErro(e.message); }
   }
+  async function excluirReuniao(r) {
+    if (!confirm(`Excluir a reunião "${r.titulo}" de ${dataBR(r.quando)}? Isso não pode ser desfeito.`)) return;
+    try { await api("/api/portal/admin/crm/itens", { method: "DELETE", body: { tipo: "reuniao", id: r.id } }); carregar(); } catch (e) { setErro(e.message); }
+  }
   async function concluirAtividade(a) { await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "atividade", dados: { id: a.id, status: "concluida" } } }); carregar(); }
 
   const whats = l.telefone ? `https://wa.me/${l.telefone.replace(/\D/g, "").replace(/^(?!55)/, "55")}` : null;
@@ -98,7 +102,7 @@ export default function LeadDetalhe({ id }) {
           <Secao titulo="Reuniões" acao={<button onClick={() => setModal({ tipo: "reuniao" })} className={btnLinha}><Plus size={16} />Agendar</button>}>
             {d.reunioes.length === 0 ? <p className="text-sm text-white/40">Nenhuma reunião.</p> : (
               <ul className="space-y-2">{d.reunioes.sort((a, b) => b.quando.localeCompare(a.quando)).map((r) => (
-                <li key={r.id} className="flex items-center justify-between gap-3 text-sm"><span>{dataBR(r.quando)} · {r.titulo} <span className="text-white/40">({STATUS_REUNIAO[r.status]})</span></span><button onClick={() => setModal({ tipo: "reuniao", item: r })} className="text-xs text-blue-400">Editar</button></li>))}
+                <li key={r.id} className="flex items-center justify-between gap-3 text-sm"><span>{dataBR(r.quando)} · {r.titulo} <span className="text-white/40">({STATUS_REUNIAO[r.status]})</span></span><span className="flex gap-3"><button onClick={() => setModal({ tipo: "reuniao", item: r })} className="text-xs text-blue-400">Editar</button><button onClick={() => excluirReuniao(r)} aria-label={`Excluir reunião ${r.titulo}`} className="text-xs text-red-300 hover:underline">Excluir</button></span></li>))}
               </ul>
             )}
           </Secao>

@@ -129,10 +129,10 @@ export function SeletorEtapa({ valor, onChange, className = "" }) {
 }
 
 export function InteracaoForm({ leadId, item, onSalvo, onCancelar }) {
-  const [erro, setErro] = useState("");
+  const [erro, setErro] = useState(""); const [salvando, setSalvando] = useState(false);
   async function enviar(e) {
-    e.preventDefault(); const dados = Object.fromEntries(new FormData(e.currentTarget));
-    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "interacao", leadId, dados: { ...dados, id: item?.id } } }); onSalvo(r.interacao); } catch (err) { setErro(err.message); }
+    e.preventDefault(); if (salvando) return; setSalvando(true); const dados = Object.fromEntries(new FormData(e.currentTarget));
+    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "interacao", leadId, dados: { ...dados, id: item?.id } } }); onSalvo(r.interacao); } catch (err) { setErro(err.message); setSalvando(false); }
   }
   return (
     <form onSubmit={enviar} className="space-y-4">
@@ -148,17 +148,17 @@ export function InteracaoForm({ leadId, item, onSalvo, onCancelar }) {
         <Campo label="Responsável"><input name="responsavel" maxLength={80} defaultValue={v(item?.responsavel)} className={inp} /></Campo>
       </div>
       <Erro msg={erro} />
-      <div className="flex gap-3"><button type="submit" className={btnAzul}>Salvar registro</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
+      <div className="flex gap-3"><button type="submit" disabled={salvando} className={btnAzul}>{salvando ? "Salvando..." : "Salvar registro"}</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
     </form>
   );
 }
 
 export function AtividadeForm({ item, leads, leadFixo, onSalvo, onCancelar }) {
-  const [erro, setErro] = useState("");
+  const [erro, setErro] = useState(""); const [salvando, setSalvando] = useState(false);
   async function enviar(e) {
-    e.preventDefault(); const dados = Object.fromEntries(new FormData(e.currentTarget));
+    e.preventDefault(); if (salvando) return; setSalvando(true); const dados = Object.fromEntries(new FormData(e.currentTarget));
     if (leadFixo) dados.leadId = leadFixo;
-    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "atividade", dados: { ...dados, id: item?.id } } }); onSalvo(r.atividade); } catch (err) { setErro(err.message); }
+    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "atividade", dados: { ...dados, id: item?.id } } }); onSalvo(r.atividade); } catch (err) { setErro(err.message); setSalvando(false); }
   }
   return (
     <form onSubmit={enviar} className="space-y-4">
@@ -172,17 +172,17 @@ export function AtividadeForm({ item, leads, leadFixo, onSalvo, onCancelar }) {
       <Campo label="Responsável"><input name="responsavel" maxLength={80} defaultValue={v(item?.responsavel)} className={inp} /></Campo>
       <Campo label="Descrição"><textarea name="descricao" rows={2} maxLength={1000} defaultValue={v(item?.descricao)} className={inp} /></Campo>
       <Erro msg={erro} />
-      <div className="flex gap-3"><button type="submit" className={btnAzul}>Salvar atividade</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
+      <div className="flex gap-3"><button type="submit" disabled={salvando} className={btnAzul}>{salvando ? "Salvando..." : "Salvar atividade"}</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
     </form>
   );
 }
 
 export function ReuniaoForm({ item, leads, leadFixo, onSalvo, onCancelar }) {
-  const [erro, setErro] = useState("");
+  const [erro, setErro] = useState(""); const [salvando, setSalvando] = useState(false);
   async function enviar(e) {
-    e.preventDefault(); const dados = Object.fromEntries(new FormData(e.currentTarget));
+    e.preventDefault(); if (salvando) return; setSalvando(true); const dados = Object.fromEntries(new FormData(e.currentTarget));
     if (leadFixo) dados.leadId = leadFixo;
-    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "reuniao", dados: { ...dados, id: item?.id } } }); onSalvo(r.reuniao); } catch (err) { setErro(err.message); }
+    try { const r = await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "reuniao", dados: { ...dados, id: item?.id } } }); onSalvo(r.reuniao); } catch (err) { setErro(err.message); setSalvando(false); }
   }
   return (
     <form onSubmit={enviar} className="space-y-4">
@@ -202,7 +202,7 @@ export function ReuniaoForm({ item, leads, leadFixo, onSalvo, onCancelar }) {
       {item && <Campo label="Resumo da reunião (depois de realizada)"><textarea name="resumo" rows={3} maxLength={4000} defaultValue={v(item?.resumo)} className={inp} /></Campo>}
       <p className="text-xs text-white/40">Nenhum convite é enviado automaticamente.</p>
       <Erro msg={erro} />
-      <div className="flex gap-3"><button type="submit" className={btnAzul}>Salvar reunião</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
+      <div className="flex gap-3"><button type="submit" disabled={salvando} className={btnAzul}>{salvando ? "Salvando..." : "Salvar reunião"}</button><button type="button" onClick={onCancelar} className={btnLinha}>Cancelar</button></div>
     </form>
   );
 }
