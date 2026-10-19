@@ -23,10 +23,10 @@ const TEXTOS = {
 };
 
 // Formulário do admin para enviar propostas e contratos
-export default function NovaProposta({ clientes, propostas = [] }) {
+export default function NovaProposta({ clientes, propostas = [], inicial = null }) {
   const router = useRouter();
-  const [tipo, setTipo] = useState(null); // null = fechado
-  const [clienteId, setClienteId] = useState("");
+  const [tipo, setTipo] = useState(inicial?.tipo || null); // null = fechado
+  const [clienteId, setClienteId] = useState(inicial?.clienteId && clientes.some((c) => c.id === inicial.clienteId) ? inicial.clienteId : "");
   const [sucesso, setSucesso] = useState("");
   const { enviando, erro, setErro, enviar } = useEnvio();
   const t = TEXTOS[tipo || "proposta"];
@@ -125,7 +125,7 @@ export default function NovaProposta({ clientes, propostas = [] }) {
         </div>
         <div>
           <label htmlFor="titulo" className={label}>Título</label>
-          <input id="titulo" name="titulo" required placeholder={t.placeholderTitulo} className={input} />
+          <input id="titulo" name="titulo" required placeholder={t.placeholderTitulo} defaultValue={inicial?.titulo || ""} className={input} />
         </div>
       </div>
 
@@ -189,7 +189,7 @@ export default function NovaProposta({ clientes, propostas = [] }) {
           <label htmlFor="valor" className={label}>
             Valor (R$) {contrato && <span className="text-white/40">(opcional)</span>}
           </label>
-          <input id="valor" name="valor" required={!contrato} inputMode="decimal" placeholder="1.500,00" className={input} />
+          <input id="valor" name="valor" required={!contrato} inputMode="decimal" placeholder="1.500,00" defaultValue={inicial?.valor ? String(inicial.valor).replace(".", ",") : ""} className={input} />
         </div>
         <div>
           <label htmlFor="condicoes" className={label}>Condições</label>

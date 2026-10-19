@@ -3,6 +3,7 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { processarFila } from "@/lib/notificacoes/central";
+import { verificarLembretes } from "@/lib/crm/lembretes";
 
 export async function GET(request) {
   const segredo = process.env.CRON_SECRET;
@@ -10,5 +11,6 @@ export async function GET(request) {
   const esperado = `Bearer ${segredo}`;
   const valido = segredo && recebido.length === esperado.length && crypto.timingSafeEqual(Buffer.from(recebido), Buffer.from(esperado));
   if (!valido) return NextResponse.json({ erro: "Não autorizado." }, { status: 401 });
-  return NextResponse.json({ ok: true, resultado: await processarFila(50) });
+  const lembretesCrm = await verificarLembretes().catch(() => 0);
+  return NextResponse.json({ ok: true, lembretesCrm, resultado: await processarFila(50) });
 }

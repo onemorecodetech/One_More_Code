@@ -2,6 +2,7 @@ import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
 import Sino from "@/components/portal/sino";
+import { Briefcase } from "lucide-react";
 import NovaProposta from "@/components/portal/nova-proposta";
 import AcoesProposta from "@/components/portal/acoes-proposta";
 import BotaoExcluir from "@/components/portal/botao-excluir";
@@ -13,7 +14,8 @@ export const dynamic = "force-dynamic";
 
 const ORDEM = { conferencia: 0, aguardando: 1, expirada: 2, aprovada: 3, cancelada: 4 };
 
-export default async function AdminPage() {
+export default async function AdminPage(props) {
+  const busca = (await props.searchParams) || {};
   const { db } = await exigirAdmin();
   const clientes = [...db.clientes].sort((a, b) => a.nome.localeCompare(b.nome));
   const porId = Object.fromEntries(db.clientes.map((c) => [c.id, c]));
@@ -35,6 +37,7 @@ export default async function AdminPage() {
       <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
         <h1 className="text-3xl md:text-4xl font-bold">Propostas e contratos</h1>
         <div className="flex items-center gap-4">
+          <a href="/admin/crm" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 px-4 font-semibold text-white/90 transition hover:border-blue-400 hover:text-blue-300"><Briefcase size={18} aria-hidden="true" />CRM Comercial</a>
           <Sino pagina="/admin/notificacoes" />
           <BotaoSair destino="/admin/entrar" />
         </div>
@@ -51,6 +54,7 @@ export default async function AdminPage() {
 
       <div className="mb-10">
         <NovaProposta
+          inicial={["proposta", "contrato"].includes(busca.novo) ? { tipo: busca.novo, clienteId: String(busca.cliente || ""), titulo: String(busca.titulo || ""), valor: String(busca.valor || "") } : null}
           clientes={clientes.map(({ id, nome, empresa, email }) => ({ id, nome, empresa, email }))}
           propostas={propostas
             .filter((p) => (p.tipo || "proposta") === "proposta")

@@ -16,6 +16,7 @@ export const CATEGORIAS = {
   dominios: { nome: "Domínios", essencial: true },
   reunioes: { nome: "Reuniões", essencial: false },
   orcamentos: { nome: "Orçamentos", essencial: false },
+  crm: { nome: "CRM comercial", essencial: false },
 };
 
 const doc = (d) => `${d.tipoDoc === "contrato" ? "o contrato" : "a proposta"} ${d.codigo}`;
@@ -122,6 +123,14 @@ export const EVENTOS = {
     cliente: { titulo: (d) => `${Doc(d)} reabert${d.tipoDoc === "contrato" ? "o" : "a"}`, mensagem: () => "O documento está disponível novamente para assinatura.", link: linkDocCliente, email: true,
       emailTexto: (d) => ({ assunto: `${Doc(d)} disponível novamente | OneMoreCode`, titulo: `${Doc(d)} disponível novamente`, paragrafos: [`Olá, ${d.primeiroNome}!`, `${Doc(d)} (${d.titulo}) foi reaberto para assinatura.`], botao: { texto: "Ver documento", link: linkDocCliente(d) } }) },
   },
+
+  // ── CRM comercial (avisos internos do admin; não vão por e-mail) ──
+  "crm.atividade_hoje": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `Atividade hoje: ${d.titulo}`, mensagem: (d) => `${d.hora}${d.empresa ? ` · ${d.empresa}` : ""}`, link: (d) => (d.leadId ? `/admin/crm/${d.leadId}` : "/admin/crm"), email: false } },
+  "crm.atividade_atrasada": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `Atividade atrasada: ${d.titulo}`, mensagem: (d) => `Prevista para ${d.quando}${d.empresa ? ` · ${d.empresa}` : ""}`, link: (d) => (d.leadId ? `/admin/crm/${d.leadId}` : "/admin/crm"), email: false } },
+  "crm.reuniao_proxima": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `Reunião em breve: ${d.titulo}`, mensagem: (d) => `${d.quando}${d.empresa ? ` · ${d.empresa}` : ""}`, link: (d) => (d.leadId ? `/admin/crm/${d.leadId}` : "/admin/crm"), email: false } },
+  "crm.lead_parado": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `Sem contato há ${d.dias} dias: ${d.empresa}`, mensagem: () => "Vale fazer um novo acompanhamento.", link: (d) => `/admin/crm/${d.leadId}`, email: false } },
+  "crm.proposta_aguardando": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `Proposta ${d.codigo} aguardando resposta`, mensagem: (d) => `${d.empresa} ainda não assinou (enviada há ${d.dias} dias).`, link: (d) => `/admin/crm/${d.leadId}`, email: false } },
+  "crm.lead_convertido": { modulo: "ativo", categoria: "crm", admin: { titulo: (d) => `${d.empresa} agora é cliente`, mensagem: (d) => `Vinculada à conta de ${d.cliente} na área do cliente.`, link: (d) => `/admin/crm/${d.leadId}`, email: false } },
 
   // ── Futuros (prontos para os próximos módulos; nada dispara hoje) ──
   "projeto.criado": { modulo: "futuro", categoria: "projetos" },
