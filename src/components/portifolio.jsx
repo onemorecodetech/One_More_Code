@@ -18,6 +18,14 @@ const projects = [
     url: "https://www.studioalenails.com.br",
     tags: ["Node.js", "Express", "Vercel", "Redis", "Painel admin", "SEO"],
   },
+  {
+    title: "Top Training Academia",
+    category: "Site + painel administrativo",
+    description:
+      "Site para uma nail designer apresentar seus serviços, valores e horários. A própria profissional atualiza o conteúdo por um painel administrativo simples, e as clientes agendam diretamente pelo aplicativo de agendamento. O site também indica, em tempo real, se o studio está aberto.",
+    image: "/images/portfolio/top-training.jpg",
+    tags: ["Node.js", "Express", "Vercel", "Redis", "Painel admin", "SEO"],
+  },
 ];
 
 function BrowserFrame({ src, alt, url, priority }) {
