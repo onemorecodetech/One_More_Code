@@ -22,14 +22,18 @@ const projects = [
     title: "Top Training Academia",
     category: "Site + painel administrativo",
     description:
-      "Site para uma nail designer apresentar seus serviços, valores e horários. A própria profissional atualiza o conteúdo por um painel administrativo simples, e as clientes agendam diretamente pelo aplicativo de agendamento. O site também indica, em tempo real, se o studio está aberto.",
-    image: "/images/portfolio/top-training.jpg",
-    tags: ["Node.js", "Express", "Vercel", "Redis", "Painel admin", "SEO"],
+      "Site para uma academia de Erechim apresentar modalidades, planos e atletas, com identidade visual forte e painel administrativo para a equipe atualizar o conteúdo sem depender de ninguém.",
+    image: "/images/portfolio/top-training-academia.jpg",
+    url: null, // preencher com "https://..." quando o site estiver no ar
+    dominio: "toptrainingacad.com.br",
+    tags: ["Node.js", "Express", "Vercel", "Painel admin", "SEO local"],
   },
 ];
 
-function BrowserFrame({ src, alt, url, priority }) {
-  const host = url.replace(/^https?:\/\//, "");
+const INTERVALO = 6000; // tempo de cada projeto na tela (ms)
+
+function BrowserFrame({ src, alt, url, dominio, priority }) {
+  const host = url ? url.replace(/^https?:\/\//, "") : dominio || "prévia do projeto";
   return (
     <div className="overflow-hidden rounded-xl border border-white/10 bg-[#0B0F1A] shadow-2xl shadow-black/40">
       <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
@@ -74,7 +78,12 @@ export default function Portfolio() {
   const total = projects.length;
   const hasMany = total > 1;
   const [current, setCurrent] = useState(0);
+  const [pausadoPeloUsuario, setPausadoPeloUsuario] = useState(false);
+  const [interagindo, setInteragindo] = useState(false);
+  const [visivel, setVisivel] = useState(false);
   const touchStart = useRef(null);
+  const secao = useRef(null);
+  const reduzMovimento = useRef(false);
 
   const goTo = useCallback((i) => setCurrent((i + total) % total), [total]);
   const next = useCallback(() => goTo(current + 1), [current, goTo]);
@@ -98,12 +107,28 @@ export default function Portfolio() {
     touchStart.current = null;
   }
 
+  // Só passa sozinho quando a seção está na tela
   useEffect(() => {
-    if (current >= total) setCurrent(0);
-  }, [current, total]);
+    reduzMovimento.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const el = secao.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const o = new IntersectionObserver(([e]) => setVisivel(e.isIntersecting), { threshold: 0.35 });
+    o.observe(el);
+    return () => o.disconnect();
+  }, []);
+
+  const rodando = hasMany && visivel && !pausadoPeloUsuario && !interagindo && !reduzMovimento.current;
+
+  useEffect(() => {
+    if (!rodando) return;
+    const t = setTimeout(() => { if (document.visibilityState === "visible") setCurrent((c) => (c + 1) % total); }, INTERVALO);
+    return () => clearTimeout(t);
+  }, [rodando, current, total]);
 
   return (
-    <section id="portfolio" className="py-24 px-6">
+    <>
+    <style>{`@keyframes progresso-portfolio { from { width: 0% } to { width: 100% } }`}</style>
+    <section id="portfolio" ref={secao} className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <div>
@@ -111,12 +136,11 @@ export default function Portfolio() {
               Portfólio
             </p>
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Projetos entregues
+              Nossos projetos
             </h2>
             <p className="text-white/70 max-w-2xl">
               Cada negócio tem necessidades próprias, e cada projeto é desenvolvido
-              para atendê-las. Estes já estão no ar e fazem parte da rotina dos
-              nossos clientes.
+              para atendê-las. Conheça alguns dos trabalhos da OneMoreCode.
             </p>
           </div>
 
@@ -134,8 +158,12 @@ export default function Portfolio() {
           aria-label="Projetos do portfólio"
           tabIndex={hasMany ? 0 : -1}
           onKeyDown={onKeyDown}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
+          onTouchStart={(e) => { setInteragindo(true); onTouchStart(e); }}
+          onTouchEnd={(e) => { onTouchEnd(e); setTimeout(() => setInteragindo(false), 4000); }}
+          onMouseEnter={() => setInteragindo(true)}
+          onMouseLeave={() => setInteragindo(false)}
+          onFocus={() => setInteragindo(true)}
+          onBlur={() => setInteragindo(false)}
           className="overflow-hidden rounded-3xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
         >
           <div
@@ -156,6 +184,7 @@ export default function Portfolio() {
                   src={project.image}
                   alt={`Página inicial do site ${project.title}`}
                   url={project.url}
+                  dominio={project.dominio}
                   priority={i === 0}
                 />
 
@@ -179,14 +208,14 @@ export default function Portfolio() {
                     ))}
                   </ul>
 
-                  <a
+                  {project.url && <a
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-500 hover:bg-blue-600 text-base font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
                   >
                     Ver site no ar ↗
-                  </a>
+                  </a>}
                 </div>
               </article>
             ))}
@@ -207,16 +236,37 @@ export default function Portfolio() {
                   onClick={() => goTo(i)}
                   aria-label={`Ver projeto ${i + 1}: ${project.title}`}
                   aria-current={i === current}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    i === current ? "w-8 bg-blue-500" : "w-2.5 bg-white/25 hover:bg-white/50"
+                  className={`relative h-2.5 overflow-hidden rounded-full transition-all duration-300 ${
+                    i === current ? "w-10 bg-white/25" : "w-2.5 bg-white/25 hover:bg-white/50"
                   }`}
-                />
+                >
+                  {i === current && (
+                    <span
+                      key={`${current}-${rodando}`}
+                      className="absolute inset-y-0 left-0 rounded-full bg-blue-500"
+                      style={{ width: rodando ? undefined : "100%", animation: rodando ? `progresso-portfolio ${INTERVALO}ms linear forwards` : "none" }}
+                    />
+                  )}
+                </button>
               ))}
             </div>
 
             <div className="md:hidden">
               <Arrow direction="next" onClick={next} />
             </div>
+
+            <button
+              type="button"
+              onClick={() => setPausadoPeloUsuario((v) => !v)}
+              aria-label={pausadoPeloUsuario ? "Retomar passagem automática" : "Pausar passagem automática"}
+              className="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:border-blue-400 hover:text-white"
+            >
+              {pausadoPeloUsuario ? (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+              ) : (
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+              )}
+            </button>
           </div>
         )}
 
@@ -238,5 +288,6 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
+    </>
   );
 }
