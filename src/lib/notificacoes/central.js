@@ -36,7 +36,7 @@ async function criarNotificacao(dest, n) {
   const chave = chaveNotif(dest);
   await kv.hset(chave, n.id, n);
   const todas = await kv.hgetall(chave);
-  const ids = Object.values(todas).sort((a, b) => b.criadaEm.localeCompare(a.criadaEm)).slice(MAX_NOTIF).map((x) => x.id);
+  const ids = Object.values(todas).filter((x) => x && x.id && x.criadaEm).sort((a, b) => b.criadaEm.localeCompare(a.criadaEm)).slice(MAX_NOTIF).map((x) => x.id);
   if (ids.length) await kv.hdel(chave, ...ids);
 }
 
@@ -93,7 +93,7 @@ export async function publicarSeguro(tipo, opcoes) {
 // Envia os e-mails pendentes. Chamado depois da resposta (after), pelo cron e pelo painel.
 export async function processarFila(limite = 10) {
   const itens = Object.values(await kv.hgetall("omc:outbox"))
-    .filter((e) => e.status === "pendente" && e.proxima <= Date.now())
+    .filter((e) => e && e.status === "pendente" && e.proxima <= Date.now())
     .sort((a, b) => a.proxima - b.proxima)
     .slice(0, limite);
   const resultado = { enviados: 0, falhas: 0, adiados: 0 };
@@ -138,7 +138,7 @@ export async function processarDepois() {
 }
 
 export async function listarNotificacoes(dest, { categoria, lidas } = {}) {
-  let lista = Object.values(await kv.hgetall(chaveNotif(dest))).sort((a, b) => b.criadaEm.localeCompare(a.criadaEm));
+  let lista = Object.values(await kv.hgetall(chaveNotif(dest))).filter((n) => n && n.id && n.criadaEm).sort((a, b) => b.criadaEm.localeCompare(a.criadaEm));
   const naoLidas = lista.filter((n) => !n.lida).length;
   if (categoria) lista = lista.filter((n) => n.categoria === categoria);
   if (lidas === "sim") lista = lista.filter((n) => n.lida);
@@ -149,13 +149,13 @@ export async function listarNotificacoes(dest, { categoria, lidas } = {}) {
 export async function marcarLidas(dest, ids, todas = false) {
   const chave = chaveNotif(dest);
   const atuais = await kv.hgetall(chave);
-  for (const n of Object.values(atuais)) {
+  for (const n of Object.values(atuais).filter((x) => x && x.id)) {
     if (!n.lida && (todas || ids.includes(n.id))) await kv.hset(chave, n.id, { ...n, lida: true });
   }
 }
 
 export async function statusFila() {
-  const itens = Object.values(await kv.hgetall("omc:outbox"));
+  const itens = Object.values(await kv.hgetall("omc:outbox")).filter((e) => e && e.id);
   return {
     pendentes: itens.filter((e) => e.status === "pendente").length,
     falhas: itens.filter((e) => e.status === "falhou").map(({ id, para, assunto, erro, tentativas }) => ({ id, para, assunto, erro, tentativas })),
@@ -164,7 +164,7 @@ export async function statusFila() {
 }
 
 export async function reenviarFalhas() {
-  for (const e of Object.values(await kv.hgetall("omc:outbox"))) {
+  for (const e of Object.values(await kv.hgetall("omc:outbox")).filter((x) => x && x.id)) {
     if (e.status === "falhou") await kv.hset("omc:outbox", e.id, { ...e, status: "pendente", tentativas: 0, proxima: Date.now(), erro: null });
   }
 }

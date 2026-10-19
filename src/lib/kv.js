@@ -76,7 +76,14 @@ export async function hset(key, campo, valor) {
 }
 export async function hgetall(key) {
   const c = await r();
-  if (c) { const o = (await c.hgetall(key)) || {}; return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, dec(v)])); }
+  if (c) {
+    // Sem desserialização automática, o Upstash devolve [campo, valor, campo, valor...]
+    const bruto = (await c.hgetall(key)) || [];
+    const pares = Array.isArray(bruto) ? bruto : Object.entries(bruto).flat();
+    const obj = {};
+    for (let i = 0; i + 1 < pares.length; i += 2) obj[pares[i]] = dec(pares[i + 1]);
+    return obj;
+  }
   falta(); return ler()[key]?.v || {};
 }
 export async function hdel(key, ...campos) {

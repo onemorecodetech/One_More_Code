@@ -73,10 +73,11 @@ export default function PainelCRM() {
 
 // ── Visão geral ───────────────────────────────────────────
 function VisaoGeral() {
-  const [d, setD] = useState(null);
-  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=resumo").then(setD).catch(() => {}), []);
+  const [d, setD] = useState(null); const [falha, setFalha] = useState("");
+  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=resumo").then((r) => { setD(r); setFalha(""); }).catch((e) => setFalha(e.message)), []);
   useEffect(() => { carregar(); }, [carregar]);
   async function concluir(a) { await api("/api/portal/admin/crm/itens", { method: "POST", body: { tipo: "atividade", dados: { id: a.id, status: "concluida" } } }); carregar(); }
+  if (falha && !d) return <p role="alert" className="text-red-400">Não foi possível carregar a visão geral: {falha} <button onClick={carregar} className="underline">Tentar de novo</button></p>;
   if (!d) return <p className="text-white/50">Carregando...</p>;
   const t = d.totais, v = d.valores, g = d.graficos;
   const ind = [["Leads", t.leads], ["Ativos", t.ativos], ["Novos no mês", t.novosNoMes], ["Em andamento", t.emAndamento], ["Reuniões agendadas", t.reunioesAgendadas], ["Propostas enviadas", t.propostasEnviadas], ["Fechados", t.contratosFechados], ["Perdidos", t.perdidos], ["Conversão", t.taxaConversao == null ? "—" : `${t.taxaConversao}%`], ["Tempo médio até fechar", t.tempoMedioDias == null ? "—" : `${t.tempoMedioDias} dias`]];
@@ -240,7 +241,7 @@ function Empresas({ leads, servicos, onMover }) {
 // ── Atividades ────────────────────────────────────────────
 function Atividades() {
   const [d, setD] = useState(null); const [modal, setModal] = useState(null); const [status, setStatus] = useState("pendente");
-  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=atividades").then(setD).catch(() => {}), []);
+  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=atividades").then(setD).catch((e) => setD({ erro: e.message, atividades: [], reunioes: [], leads: [] })), []);
   useEffect(() => { carregar(); }, [carregar]);
   if (!d) return <p className="text-white/50">Carregando...</p>;
   const nome = Object.fromEntries(d.leads.map((l) => [l.id, l.nome]));
@@ -279,7 +280,7 @@ function Atividades() {
 // ── Reuniões ──────────────────────────────────────────────
 function Reunioes() {
   const [d, setD] = useState(null); const [modal, setModal] = useState(null);
-  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=reunioes").then(setD).catch(() => {}), []);
+  const carregar = useCallback(() => api("/api/portal/admin/crm?visao=reunioes").then(setD).catch((e) => setD({ erro: e.message, atividades: [], reunioes: [], leads: [] })), []);
   useEffect(() => { carregar(); }, [carregar]);
   if (!d) return <p className="text-white/50">Carregando...</p>;
   const nome = Object.fromEntries(d.leads.map((l) => [l.id, l.nome]));

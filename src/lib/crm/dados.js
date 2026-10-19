@@ -74,13 +74,15 @@ export function duplicados(lead, todos) {
 }
 
 // ── Leads ─────────────────────────────────────────────────
+const valido = (x) => x && typeof x === "object" && typeof x.id === "string";
+
 export async function listarLeads() {
-  return Object.values(await kv.hgetall(K.leads));
+  return Object.values(await kv.hgetall(K.leads)).filter((l) => valido(l) && typeof l.nome === "string" && typeof l.criadoEm === "string");
 }
 
 export async function lerLead(id) {
   const l = (await kv.hgetall(K.leads))[id];
-  if (!l) throw new ErroCRM("Empresa não encontrada.", 404);
+  if (!valido(l)) throw new ErroCRM("Empresa não encontrada.", 404);
   return l;
 }
 
@@ -195,11 +197,11 @@ export async function salvarInteracao(leadId, b) {
   return reg;
 }
 export async function listarInteracoes(leadId) {
-  return Object.values(await kv.hgetall(K.inter(leadId))).sort((a, b) => b.em.localeCompare(a.em));
+  return Object.values(await kv.hgetall(K.inter(leadId))).filter((i) => valido(i) && typeof i.em === "string").sort((a, b) => b.em.localeCompare(a.em));
 }
 
 // ── Atividades ────────────────────────────────────────────
-export async function listarAtividades() { return Object.values(await kv.hgetall(K.ativ)); }
+export async function listarAtividades() { return Object.values(await kv.hgetall(K.ativ)).filter((a) => valido(a) && typeof a.quando === "string"); }
 export async function salvarAtividade(b) {
   return comTrava(`ativ:${b.id || "nova"}`, async () => {
     const atual = b.id ? (await kv.hgetall(K.ativ))[b.id] : null;
@@ -221,7 +223,7 @@ export async function salvarAtividade(b) {
 }
 
 // ── Reuniões ──────────────────────────────────────────────
-export async function listarReunioes() { return Object.values(await kv.hgetall(K.reun)); }
+export async function listarReunioes() { return Object.values(await kv.hgetall(K.reun)).filter((r) => valido(r) && typeof r.quando === "string"); }
 export async function salvarReuniao(b) {
   return comTrava(`reun:${b.id || "nova"}`, async () => {
     const atual = b.id ? (await kv.hgetall(K.reun))[b.id] : null;
