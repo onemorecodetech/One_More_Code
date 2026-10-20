@@ -28,6 +28,16 @@ const projects = [
     dominio: "toptrainingacad.com.br",
     tags: ["Node.js", "Express", "Vercel", "Painel admin", "SEO local"],
   },
+  {
+    title: "Sistema de Comandas",
+    category: "Sistema web + app mobile · Projeto acadêmico",
+    description:
+      "Sistema completo para restaurantes: o garçom lança os pedidos pelo aplicativo, a cozinha acompanha e atualiza o preparo em tempo real pela versão web, e a gerência controla salão, comandas e cardápio. API própria com autenticação e permissões por perfil.",
+    image: "/images/portfolio/sistema-comandas.jpg",
+    url: null,
+    dominio: "sistema de comandas",
+    tags: ["NestJS", "PostgreSQL", "Prisma", "Next.js", "Flutter", "API REST"],
+  },
 ];
 
 const INTERVALO = 6000; // tempo de cada projeto na tela (ms)
