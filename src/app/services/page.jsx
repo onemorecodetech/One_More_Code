@@ -9,9 +9,14 @@ export const metadata = {
 
 export default function Pagina() {
   return (
-    <main className="text-white min-h-screen">
+    <main className="text-white min-h-screen flex flex-col">
       <Navbar />
-      <Services />
+      {/* O conteúdo ocupa o espaço livre: o rodapé fica sempre no fim da tela */}
+      <div className="flex flex-1 items-center">
+        <div className="w-full">
+          <Services />
+        </div>
+      </div>
       <Footer />
     </main>
   );
