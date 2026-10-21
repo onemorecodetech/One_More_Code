@@ -45,3 +45,17 @@ export async function limparTentativas(chave) {
   if (r) await r.del(k);
   else memoria.delete(k);
 }
+
+// Lê quantas tentativas já foram registradas, sem somar. Devolve { total, restante (min) }
+export async function lerTentativas(chave) {
+  const k = `omc:limite:${chave}`;
+  const r = await getRedis().catch(() => null);
+  if (r) {
+    const total = Number(await r.get(k)) || 0;
+    const ttl = total ? await r.ttl(k) : 0;
+    return { total, restante: Math.ceil(Math.max(ttl, 60) / 60) };
+  }
+  const atual = memoria.get(k);
+  if (!atual || atual.ate < Date.now()) return { total: 0, restante: 0 };
+  return { total: atual.total, restante: Math.ceil((atual.ate - Date.now()) / 60000) };
+}

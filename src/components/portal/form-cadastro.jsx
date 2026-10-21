@@ -20,6 +20,7 @@ export default function FormCadastro() {
         whatsapp: f.get("whatsapp"),
         senha: f.get("senha"),
         aceite: f.get("aceite") === "on",
+        site: f.get("site") || "",
       },
     });
     if (ok) {
@@ -30,6 +31,8 @@ export default function FormCadastro() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      {/* Campo anti-robô: invisível para pessoas */}
+      <input type="text" name="site" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label htmlFor="nome" className={label}>Nome</label>

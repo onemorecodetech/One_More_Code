@@ -17,6 +17,8 @@ export async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}));
+  // Robô preencheu o campo invisível: responde "ok" sem criar nada
+  if (body.site) return NextResponse.json({ ok: true });
   const nome = texto(body.nome, 120);
   const email = texto(body.email, 160).toLowerCase();
   const whatsapp = texto(body.whatsapp, 20).replace(/\D/g, "");
