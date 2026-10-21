@@ -3,6 +3,7 @@ import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
 import Sino from "@/components/portal/sino";
+import { Settings } from "lucide-react";
 import ContatoWhatsApp from "@/components/portal/contato-whatsapp";
 import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
@@ -66,6 +67,7 @@ export default async function ClientePage() {
         <div className="flex items-center gap-4">
           <ContatoWhatsApp compacto mensagem={`Olá! Sou ${cliente.nome} e estou entrando em contato pela área do cliente da OneMoreCode.`} />
           <Sino pagina="/cliente/notificacoes" />
+          <Link href="/cliente/configuracoes" aria-label="Configurações da conta" title="Configurações da conta" className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 text-white/80 transition hover:border-blue-400 hover:text-white"><Settings size={20} aria-hidden="true" /></Link>
           <BotaoSair />
         </div>
       </div>

@@ -222,7 +222,7 @@ export default function Portfolio() {
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-500 hover:bg-blue-600 text-base font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
+                    className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-base font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
                   >
                     Ver site no ar ↗
                   </a>}
@@ -253,7 +253,7 @@ export default function Portfolio() {
                   {i === current && (
                     <span
                       key={`${current}-${rodando}`}
-                      className="absolute inset-y-0 left-0 rounded-full bg-blue-500"
+                      className="absolute inset-y-0 left-0 rounded-full bg-blue-600"
                       style={{ width: rodando ? undefined : "100%", animation: rodando ? `progresso-portfolio ${INTERVALO}ms linear forwards` : "none" }}
                     />
                   )}

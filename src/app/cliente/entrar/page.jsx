@@ -5,14 +5,16 @@ import { clienteLogado } from "@/lib/portal/auth";
 import { card } from "@/components/portal/ui";
 import ContatoWhatsApp from "@/components/portal/contato-whatsapp";
 
-export default async function EntrarPage() {
+export default async function EntrarPage(props) {
   if (await clienteLogado()) redirect("/cliente");
+  const excluida = (await props.searchParams)?.conta === "excluida";
   return (
     <PortalShell>
       <div className="max-w-md mx-auto">
         <p className="text-blue-400 text-sm uppercase tracking-widest mb-4">Área do cliente</p>
         <h1 className="text-3xl md:text-4xl font-bold mb-3">Acesse seus documentos</h1>
         <p className="text-white/70 mb-8">Veja, assine e acompanhe as propostas e contratos enviados pela OneMoreCode.</p>
+        {excluida && <p role="status" className="mb-6 rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-4 text-sm text-emerald-100">Sua conta foi excluída. Obrigado por ter usado a área do cliente da OneMoreCode.</p>}
         <div className={card}>
           <FormEntrar />
         </div>

@@ -23,11 +23,6 @@
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
-     /* Evita rolagem lateral no celular caso algo passe da largura da tela */
-    overflow-x: clip;
-    /* Impede o iOS de aumentar o texto sozinho ao girar o aparelho */
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
   }
 
   a {
@@ -41,7 +36,7 @@
 
   /* Compensa a altura da navbar ao clicar em links como #contact */
   section[id] {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: 2rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -50,3 +45,14 @@
     }
   }
 }
+
+/* Páginas legais */
+.legal h2 { font-size: 1.5rem; font-weight: 700; color: #fff; margin-top: 2.5rem; margin-bottom: .5rem; }
+.legal h3 { font-size: 1.1rem; font-weight: 650; color: #fff; margin-top: 1.5rem; }
+.legal ul { list-style: disc; padding-left: 1.4rem; }
+.legal li { margin: .35rem 0; }
+.legal a { color: #93c5fd; text-decoration: underline; text-underline-offset: 3px; }
+.legal a:hover { color: #fff; }
+.legal table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.legal th, .legal td { border: 1px solid rgba(255,255,255,.12); padding: .6rem .7rem; text-align: left; vertical-align: top; }
+.legal th { background: rgba(255,255,255,.06); color: #fff; }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 
 const inputClass =
   "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-4 py-3.5 text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 disabled:opacity-60";
@@ -159,7 +160,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={sending}
-        className="inline-flex w-full items-center justify-center min-h-14 px-8 rounded-xl bg-blue-500 hover:bg-blue-600 text-base md:text-lg font-semibold shadow-lg shadow-blue-500/20 transition disabled:cursor-not-allowed disabled:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
+        className="inline-flex w-full items-center justify-center min-h-14 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-base md:text-lg font-semibold shadow-lg shadow-blue-500/20 transition disabled:cursor-not-allowed disabled:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
       >
         {sending ? "Enviando..." : "Enviar mensagem"}
       </button>
@@ -175,6 +176,11 @@ export default function ContactForm() {
           </p>
         )}
       </div>
+          <p className="text-xs text-white/60">
+        Usamos seus dados apenas para responder a este contato, conforme a{" "}
+        <Link href="/privacidade" className="text-blue-300 underline underline-offset-2">Política de Privacidade</Link>.
+        Não envie documentos ou dados sensíveis por aqui.
+      </p>
     </form>
   );
 }

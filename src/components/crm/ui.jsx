@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 
 export const inp = "w-full rounded-xl bg-[#0B0F1A] border border-white/10 px-3.5 py-2.5 text-white placeholder:text-white/30 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20";
 export const btn = "inline-flex items-center justify-center gap-2 min-h-10 px-4 rounded-xl font-semibold transition disabled:opacity-50";
-export const btnAzul = `${btn} bg-blue-500 hover:bg-blue-600 text-white`;
+export const btnAzul = `${btn} bg-blue-600 hover:bg-blue-700 text-white`;
 export const btnLinha = `${btn} border border-white/15 hover:border-blue-400 hover:text-blue-300`;
 export const card = "rounded-2xl border border-white/10 bg-white/5";
 

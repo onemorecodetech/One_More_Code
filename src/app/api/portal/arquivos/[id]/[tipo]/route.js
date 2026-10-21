@@ -9,7 +9,7 @@ export async function GET(request, contexto) {
 
   const db = await lerDB();
   const proposta = db.propostas.find((p) => p.id === params.id);
-  const permitido = proposta && (sessao.tipo === "admin" || proposta.clienteId === sessao.id);
+  const permitido = proposta && (sessao.tipo === "admin" || (proposta.clienteId === sessao.id && db.clientes.some((c) => c.id === sessao.id && !c.encerrada)));
   if (!permitido) return new Response("Não encontrado", { status: 404 });
 
   const nome = params.tipo === "assinada" ? proposta.arquivoAssinado : proposta.arquivoOriginal;

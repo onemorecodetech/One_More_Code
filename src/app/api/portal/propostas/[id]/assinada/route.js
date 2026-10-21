@@ -23,6 +23,7 @@ async function enviarAssinada(request, contexto) {
   if (sessao?.tipo !== "cliente") return NextResponse.json({ erro: "Faça login novamente." }, { status: 401 });
 
   const db = await lerDB();
+  if (!db.clientes.some((c) => c.id === sessao.id && !c.encerrada)) return NextResponse.json({ erro: "Faça login novamente." }, { status: 401 });
   const proposta = db.propostas.find((p) => p.id === params.id && p.clienteId === sessao.id);
   if (!proposta) return NextResponse.json({ erro: "Documento não encontrado." }, { status: 404 });
 

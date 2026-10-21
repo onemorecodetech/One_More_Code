@@ -53,7 +53,7 @@ export default function Sino({ pagina }) {
           <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
         </svg>
         {dados.naoLidas > 0 && (
-          <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-500 px-1 text-xs font-bold text-white">
+          <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1 text-xs font-bold text-white">
             {dados.naoLidas > 9 ? "9+" : dados.naoLidas}
           </span>
         )}
@@ -73,7 +73,7 @@ export default function Sino({ pagina }) {
                 <li key={n.id}>
                   <Link href={n.link || pagina} onClick={() => abrirItem(n)} className={`block border-b border-white/5 px-4 py-3 transition hover:bg-white/5 ${n.lida ? "opacity-60" : ""}`}>
                     <div className="flex items-start gap-2">
-                      {!n.lida && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500" aria-label="Não lida" />}
+                      {!n.lida && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-600" aria-label="Não lida" />}
                       <div>
                         <p className="text-sm font-semibold">{n.titulo}</p>
                         <p className="text-sm text-white/60">{n.mensagem}</p>

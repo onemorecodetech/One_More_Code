@@ -132,7 +132,7 @@ function Barras({ titulo, dados }) {
         <ul className="space-y-2.5">{dados.map(([n, x]) => (
           <li key={n} className="grid grid-cols-[9rem_1fr_2rem] items-center gap-3 text-sm">
             <span className="truncate text-white/60" title={n}>{n}</span>
-            <span className="h-2.5 rounded-full bg-white/5"><span className="block h-full rounded-full bg-blue-500" style={{ width: `${(x / max) * 100}%` }} /></span>
+            <span className="h-2.5 rounded-full bg-white/5"><span className="block h-full rounded-full bg-blue-600" style={{ width: `${(x / max) * 100}%` }} /></span>
             <span className="text-right text-white/80">{x}</span>
           </li>))}
         </ul>

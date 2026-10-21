@@ -1,4 +1,7 @@
-const INSTAGRAM = "https://instagram.com/onemorecode.tech";
+import Link from "next/link";
+import { EMPRESA } from "../lib/empresa";
+
+const INSTAGRAM = EMPRESA.instagram;
 const WHATSAPP =
   "https://wa.me/5554991336638?text=" +
   encodeURIComponent("Olá! Vim pelo site da OneMoreCode e gostaria de um orçamento.");
@@ -30,9 +33,21 @@ export default function Footer() {
   return (
     <footer className="border-t border-white/10 px-6 py-10">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center md:justify-between gap-6 text-center md:text-left">
-        <div className="space-y-1 text-sm text-white/60">
-          <p>© 2026 OneMoreCode. Todos os direitos reservados.</p>
+        <div className="space-y-1 text-sm text-white/70">
+          <p>© {new Date().getFullYear()} {EMPRESA.nomeFantasia}. Todos os direitos reservados.</p>
           <p>Ideias transformadas em tecnologia para impulsionar negócios.</p>
+          <p className="text-xs text-white/60">
+            {EMPRESA.razaoSocial}{EMPRESA.cnpj ? ` · CNPJ ${EMPRESA.cnpj}` : ""} · {EMPRESA.endereco || EMPRESA.cidade} ·{" "}
+            <a href={`mailto:${EMPRESA.email}`} className="underline underline-offset-2 hover:text-white">{EMPRESA.email}</a>
+          </p>
+          <nav aria-label="Documentos legais">
+            <ul className="flex flex-wrap justify-center gap-x-4 gap-y-1 pt-1 text-xs md:justify-start">
+              <li><Link href="/privacidade" className="hover:text-white underline-offset-2 hover:underline">Privacidade</Link></li>
+              <li><Link href="/termos" className="hover:text-white underline-offset-2 hover:underline">Termos de Serviço</Link></li>
+              <li><Link href="/cookies" className="hover:text-white underline-offset-2 hover:underline">Cookies</Link></li>
+              <li><Link href="/reembolso" className="hover:text-white underline-offset-2 hover:underline">Reembolso</Link></li>
+            </ul>
+          </nav>
         </div>
 
         <ul className="flex items-center gap-3">

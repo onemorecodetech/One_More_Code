@@ -5,7 +5,7 @@ import { useEnvio } from "./use-envio";
 
 const BOTOES = {
   conferencia: [
-    { acao: "confirmar", texto: "Confirmar assinatura", estilo: "bg-emerald-500 hover:bg-emerald-600 text-white" },
+    { acao: "confirmar", texto: "Confirmar assinatura", estilo: "bg-emerald-700 hover:bg-emerald-800 text-white" },
     { acao: "reenviar", texto: "Pedir novo envio", estilo: "border border-white/15 hover:border-amber-400 hover:text-amber-300" },
   ],
   aguardando: [{ acao: "cancelar", texto: "Cancelar", estilo: "border border-white/15 hover:border-red-400 hover:text-red-300" }],

@@ -92,6 +92,13 @@ export async function hdel(key, ...campos) {
   falta(); const d = ler(); if (d[key]) { for (const f of campos) delete d[key].v[f]; gravar(d); }
 }
 
+// Substitui a lista inteira (usado na limpeza de dados antigos)
+export async function substituirLista(key, itens) {
+  const c = await r();
+  if (c) { await c.del(key); for (const x of [...itens].reverse()) await c.lpush(key, enc(x)); return; }
+  falta(); const d = ler(); d[key] = { v: itens }; gravar(d);
+}
+
 // Lista com tamanho máximo (histórico)
 export async function lpushTrim(key, valor, max) {
   const c = await r(); if (c) { await c.lpush(key, enc(valor)); return c.ltrim(key, 0, max - 1); }

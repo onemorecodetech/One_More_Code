@@ -8,7 +8,7 @@ import { CATEGORIAS } from "@/lib/notificacoes/eventos";
 async function destino() {
   const s = await lerSessao();
   if (s?.tipo === "admin") return "admin";
-  if (s?.tipo === "cliente" && (await lerDB()).clientes.some((c) => c.id === s.id)) return destinoCliente(s.id);
+  if (s?.tipo === "cliente" && (await lerDB()).clientes.some((c) => c.id === s.id && !c.encerrada)) return destinoCliente(s.id);
   return null;
 }
 

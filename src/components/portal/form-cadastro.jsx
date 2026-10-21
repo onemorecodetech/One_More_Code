@@ -57,7 +57,7 @@ export default function FormCadastro() {
 
       <label className="flex items-start gap-3 text-sm text-white/70 cursor-pointer">
         <input name="aceite" type="checkbox" required className="mt-1 h-4 w-4 accent-blue-500" />
-        <span>Autorizo a OneMoreCode a usar estes dados para contato e envio de propostas comerciais e contratos.</span>
+        <span>Li e concordo com os <Link href="/termos" target="_blank" className="text-blue-300 underline underline-offset-2">Termos de Serviço</Link> e a <Link href="/privacidade" target="_blank" className="text-blue-300 underline underline-offset-2">Política de Privacidade</Link>. Meus dados serão usados para o envio de propostas, contratos e avisos sobre eles.</span>
       </label>
 
       {erro && <p role="alert" className="text-sm text-red-400">{erro}</p>}

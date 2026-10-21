@@ -48,6 +48,10 @@ export const EVENTOS = {
       }),
     },
   },
+  "cliente.conta_excluida": {
+    modulo: "ativo", categoria: "cadastro",
+    admin: { titulo: (d) => `${d.nome} excluiu a conta`, mensagem: (d) => (d.documentosGuardados ? `${d.documentosGuardados} documento(s) assinado(s) mantido(s) pelo prazo legal.` : "Todos os dados foram apagados."), link: () => "/admin", email: false },
+  },
   "documento.disponivel": {
     modulo: "ativo", categoria: "propostas", categoriaPor: (d) => (d.tipoDoc === "contrato" ? "contratos" : "propostas"),
     cliente: {

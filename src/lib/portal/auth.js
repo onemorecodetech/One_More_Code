@@ -81,7 +81,7 @@ export async function clienteLogado() {
   const sessao = await lerSessao();
   if (sessao?.tipo !== "cliente") return null;
   const db = await lerDB();
-  return db.clientes.find((c) => c.id === sessao.id) || null;
+  return db.clientes.find((c) => c.id === sessao.id && !c.encerrada) || null;
 }
 
 // Usado nas páginas: devolve o cliente logado ou manda para o login
@@ -89,7 +89,7 @@ export async function exigirCliente() {
   const sessao = await lerSessao();
   if (sessao?.tipo !== "cliente") redirect("/cliente/entrar");
   const db = await lerDB();
-  const cliente = db.clientes.find((c) => c.id === sessao.id);
+  const cliente = db.clientes.find((c) => c.id === sessao.id && !c.encerrada);
   if (!cliente) redirect("/cliente/entrar");
   return { cliente, db };
 }

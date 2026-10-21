@@ -67,7 +67,7 @@ export default function CentralNotificacoes({ categorias }) {
           {dados.lista.map((n) => (
             <li key={n.id} className={`flex flex-wrap items-start justify-between gap-3 py-4 ${n.lida ? "opacity-60" : ""}`}>
               <div className="flex gap-3">
-                <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${n.lida ? "bg-white/20" : "bg-blue-500"}`} aria-hidden="true" />
+                <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${n.lida ? "bg-white/20" : "bg-blue-600"}`} aria-hidden="true" />
                 <div>
                   <p className="text-xs uppercase tracking-wide text-white/40">{CATEGORIAS[n.categoria]?.nome} · {formatar(n.criadaEm)}</p>
                   <p className="font-semibold">{n.titulo}</p>
@@ -115,7 +115,7 @@ export function Preferencias({ categorias }) {
               <span>{CATEGORIAS[c].nome}{essencial && <span className="text-xs text-white/40"> · sempre enviado</span>}</span>
               <button
                 type="button" role="switch" aria-checked={ligado} disabled={essencial} onClick={() => alternar(c)}
-                className={`relative h-6 w-11 rounded-full transition ${ligado ? "bg-blue-500" : "bg-white/20"} disabled:opacity-50`}
+                className={`relative h-6 w-11 rounded-full transition ${ligado ? "bg-blue-600" : "bg-white/20"} disabled:opacity-50`}
               >
                 <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${ligado ? "left-[22px]" : "left-0.5"}`} />
                 <span className="sr-only">{CATEGORIAS[c].nome}</span>

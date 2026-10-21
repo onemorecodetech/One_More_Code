@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { lerSessao } from "@/lib/portal/auth";
+import { lerDB } from "@/lib/portal/storage";
 import { lerPreferencias, salvarPreferencias, destinoCliente } from "@/lib/notificacoes/central";
 
 async function destino() {
   const s = await lerSessao();
   if (s?.tipo === "admin") return "admin";
-  if (s?.tipo === "cliente") return destinoCliente(s.id);
+  if (s?.tipo === "cliente" && (await lerDB()).clientes.some((c) => c.id === s.id && !c.encerrada)) return destinoCliente(s.id);
   return null;
 }
 

@@ -1,4 +1,5 @@
 import "./globals.css";
+import AvisoCookies from "../components/legal/aviso-cookies";
 import Background from "../components/background";
 
 export const metadata = {
@@ -12,6 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <Background />
         {children}
+      <AvisoCookies />
       </body>
     </html>
   );

@@ -37,6 +37,9 @@ export default function Navbar() {
   }, [aberto]);
 
   return (
+    <>
+    {/* Atalho para quem navega pelo teclado: aparece ao apertar Tab */}
+    <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-semibold focus:text-[#0B0F1A]">Pular para o conteúdo</a>
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0B0F1A]/70 backdrop-blur-md">
       <nav className="relative max-w-6xl mx-auto flex items-center justify-between gap-6 px-6 py-4" aria-label="Principal">
         <Link href="/" className="flex shrink-0 items-center gap-3" aria-label="OneMoreCode, página inicial">
@@ -110,7 +113,7 @@ export default function Navbar() {
             <Link
               href={AREA_CLIENTE.href}
               tabIndex={aberto ? 0 : -1}
-              className="flex min-h-14 items-center justify-center rounded-xl bg-blue-500 text-lg font-semibold text-white transition hover:bg-blue-600"
+              className="flex min-h-14 items-center justify-center rounded-xl bg-blue-600 text-lg font-semibold text-white transition hover:bg-blue-700"
             >
               {AREA_CLIENTE.label}
             </Link>
@@ -118,5 +121,7 @@ export default function Navbar() {
         </ul>
       </div>
     </header>
+    <div id="conteudo" tabIndex={-1} className="outline-none" />
+    </>
   );
 }

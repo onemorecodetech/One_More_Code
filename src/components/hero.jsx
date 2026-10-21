@@ -20,7 +20,7 @@ export default function Hero() {
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <a
               href="#contact"
-              className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-500 hover:bg-blue-600 text-base md:text-lg font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
+              className="inline-flex items-center justify-center min-h-14 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-base md:text-lg font-semibold shadow-lg shadow-blue-500/20 transition focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
             >
               Solicitar orçamento
             </a>
