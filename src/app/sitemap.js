@@ -1,3 +1,5 @@
+import { PRODUTOS } from "../lib/produtos";
+
 // Gera automaticamente o /sitemap.xml
 // Se o domínio mudar, troque só a linha abaixo
 const SITE_URL = "https://onemorecode.tech";
@@ -7,6 +9,8 @@ export default function sitemap() {
     { path: "", priority: 1.0 },
     { path: "/services", priority: 0.9 },
     { path: "/portfolio", priority: 0.8 },
+    { path: "/produtos", priority: 0.8 },
+    ...PRODUTOS.map((p) => ({ path: `/produtos/${p.slug}`, priority: 0.7 })),
     { path: "/about", priority: 0.7 },
     { path: "/contact", priority: 0.8 },
     { path: "/privacidade", priority: 0.3 },
