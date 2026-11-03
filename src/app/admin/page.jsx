@@ -2,7 +2,8 @@ import PortalShell from "@/components/portal/shell";
 import StatusBadge, { TipoBadge } from "@/components/portal/status";
 import BotaoSair from "@/components/portal/botao-sair";
 import Sino from "@/components/portal/sino";
-import { Briefcase } from "lucide-react";
+import { Briefcase, QrCode } from "lucide-react";
+import CobrancasAdmin from "@/components/portal/cobrancas-admin";
 import NovaProposta from "@/components/portal/nova-proposta";
 import AcoesProposta from "@/components/portal/acoes-proposta";
 import BotaoExcluir from "@/components/portal/botao-excluir";
@@ -38,6 +39,7 @@ export default async function AdminPage(props) {
         <h1 className="text-3xl md:text-4xl font-bold">Propostas e contratos</h1>
         <div className="flex items-center gap-4">
           <a href="/admin/crm" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 px-4 font-semibold text-white/90 transition hover:border-blue-400 hover:text-blue-300"><Briefcase size={18} aria-hidden="true" />CRM Comercial</a>
+          <a href="/admin/pix" className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 px-4 font-semibold text-white/90 transition hover:border-blue-400 hover:text-blue-300"><QrCode size={18} aria-hidden="true" />Pix</a>
           <Sino pagina="/admin/notificacoes" />
           <BotaoSair destino="/admin/entrar" />
         </div>
@@ -122,6 +124,10 @@ export default async function AdminPage(props) {
                       </a>
                     )}
                   </div>
+
+                  {p.tipo === "contrato" && (
+                    <CobrancasAdmin docId={p.id} cobrancas={p.cobrancas || []} podeCriar={p.atual === "aprovada"} />
+                  )}
 
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <AcoesProposta id={p.id} status={p.atual} />

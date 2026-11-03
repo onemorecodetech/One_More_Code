@@ -7,6 +7,8 @@ import ConviteAvaliacao from "@/components/portal/convite-avaliacao";
 import { exigirCliente } from "@/lib/portal/auth";
 import { publicarSeguro } from "@/lib/notificacoes/central";
 import { statusAtual, moeda, data, dataHora, linkWhatsApp, tipoDe } from "@/lib/portal/util";
+import { cobrancasVisiveis } from "@/lib/portal/cobrancas";
+import PagamentoPix from "@/components/portal/pagamento-pix";
 import { card, btnPrimario, btnSecundario, btnWhats } from "@/components/portal/ui";
 
 export const dynamic = "force-dynamic";
@@ -139,7 +141,11 @@ export default async function PropostaPage(props) {
             <a href={`${pdf}?baixar`} className={`${btnPrimario} w-full mt-6`}>Baixar PDF</a>
           </section>
 
-          {(status === "conferencia" || status === "aprovada") && (
+          {cobrancasVisiveis(p, status).length > 0 && (
+            <PagamentoPix docId={p.id} cobrancas={cobrancasVisiveis(p, status).map(({ id, descricao, valor, status: st }) => ({ id, descricao, valor, status: st }))} />
+          )}
+
+          {(status === "conferencia" || status === "aprovada") && cobrancasVisiveis(p, status).length === 0 && (
             <section className={card}>
               <h2 className="font-bold mb-2">Pagamento</h2>
               <p className="text-sm text-white/70 mb-5">
@@ -157,7 +163,7 @@ export default async function PropostaPage(props) {
               {[...p.historico].reverse().map((h, i) => (
                 <li key={i} className="border-l-2 border-white/10 pl-4">
                   <p className="text-white/80">{h.texto}</p>
-                  <p className="text-white/40">{dataHora(h.em)}</p>
+                  <p className="text-white/60">{dataHora(h.em)}</p>
                 </li>
               ))}
             </ol>

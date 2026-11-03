@@ -19,12 +19,14 @@ export default function Privacidade() {
           <tr><td>Formulário de contato</td><td>Nome, e-mail e mensagem</td><td>Responder ao contato e preparar orçamento</td><td>Art. 7º, V (procedimentos preliminares a contrato, a seu pedido)</td><td>Até 12 meses após o envio, salvo se houver contratação</td></tr>
           <tr><td>Cadastro na área do cliente</td><td>Nome, e-mail, WhatsApp e senha (guardada apenas como código irreversível)</td><td>Criar e proteger seu acesso, disponibilizar propostas e contratos e avisar sobre eles</td><td>Art. 7º, V (execução de contrato e procedimentos preliminares)</td><td>Enquanto a conta existir; depois, pelo prazo do item 2.1</td></tr>
           <tr><td>Propostas e contratos</td><td>Documentos, arquivos assinados no gov.br e histórico das etapas</td><td>Formalizar e comprovar a contratação</td><td>Art. 7º, II, V e VI (obrigação legal, contrato e exercício de direitos)</td><td>Pelo prazo do item 2.1</td></tr>
+          <tr><td>Pagamentos por Pix</td><td>Descrição, valor e identificador da cobrança e a data em que você informou o pagamento</td><td>Registrar e conferir os pagamentos dos contratos</td><td>Art. 7º, II e V (obrigação legal e execução de contrato)</td><td>Pelo prazo do item 2.1</td></tr>
           <tr><td>Contatos comerciais com empresas</td><td>Nome da empresa e do responsável, contatos profissionais e anotações das conversas</td><td>Organizar a prospecção e o atendimento comercial</td><td>Art. 7º, IX (legítimo interesse), com direito de oposição a qualquer momento</td><td>Até o fim da negociação ou até o pedido de exclusão</td></tr>
           <tr><td>Segurança do site</td><td>Endereço IP e data e hora de tentativas de login e de envios de formulário</td><td>Evitar fraudes, ataques e abusos</td><td>Art. 7º, IX (legítimo interesse)</td><td>Registros temporários, apagados automaticamente em até 24 horas</td></tr>
         </tbody>
       </table></div>
       <h3>2.1 Prazos legais de guarda</h3>
       <p>Depois de encerrada a relação, alguns dados são mantidos apenas pelo tempo necessário para cumprir obrigações legais (por exemplo, fiscais) e para o exercício regular de direitos em eventuais processos, conforme o art. 16 da LGPD. Encerrados esses prazos, os dados são eliminados.</p>
+      <p>O Pix é feito no aplicativo do seu banco: não recebemos nem guardamos senhas, dados de cartão ou dados da sua conta bancária.</p>
       <p>Não pedimos dados sensíveis (como saúde, religião ou biometria) e pedimos que você não os envie pelos nossos formulários.</p>
 
       <h2>3. O que não fazemos</h2>

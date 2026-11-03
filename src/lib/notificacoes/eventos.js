@@ -52,6 +52,33 @@ export const EVENTOS = {
     modulo: "ativo", categoria: "cadastro",
     admin: { titulo: (d) => `${d.nome} excluiu a conta`, mensagem: (d) => (d.documentosGuardados ? `${d.documentosGuardados} documento(s) assinado(s) mantido(s) pelo prazo legal.` : "Todos os dados foram apagados."), link: () => "/admin", email: false },
   },
+  "cobranca.disponivel": {
+    modulo: "ativo", categoria: "contratos",
+    cliente: {
+      titulo: (d) => `Pagamento disponível: ${d.descricao}`,
+      mensagem: (d) => `${d.valorTexto} referente ao contrato ${d.codigo}. Pague pelo Pix na sua área do cliente.`,
+      link: (d) => `/cliente/propostas/${d.id}`, email: true,
+      emailTexto: (d) => ({ assunto: `Pagamento disponível: ${d.descricao} | OneMoreCode`, titulo: "Pagamento disponível", paragrafos: [`Olá, ${d.primeiroNome}!`, `A cobrança "${d.descricao}" (${d.valorTexto}), referente ao contrato ${d.codigo}, já está disponível.`, "Você pode pagar pelo Pix, com QR Code ou copia e cola, direto na área do cliente."], botao: { texto: "Pagar com Pix", link: `/cliente/propostas/${d.id}` } }),
+    },
+  },
+  "pagamento.informado": {
+    modulo: "ativo", categoria: "contratos",
+    admin: {
+      titulo: (d) => `Pix informado: ${d.valorTexto}`,
+      mensagem: (d) => `${d.nomeCliente} informou o pagamento de "${d.descricao}" (contrato ${d.codigo}, identificador ${d.txid}). Confira no extrato e confirme.`,
+      link: () => "/admin", email: true,
+      emailTexto: (d) => ({ assunto: `Pix informado: ${d.valorTexto} · ${d.nomeCliente}`, titulo: "Pagamento informado pelo cliente", paragrafos: [`${d.nomeCliente} informou o pagamento de "${d.descricao}" (${d.valorTexto}), contrato ${d.codigo}.`, `Identificador no extrato: ${d.txid}.`, "Confira no extrato do banco e confirme no painel."], botao: { texto: "Abrir painel", link: "/admin" } }),
+    },
+  },
+  "pagamento.confirmado": {
+    modulo: "ativo", categoria: "contratos",
+    cliente: {
+      titulo: (d) => `Pagamento confirmado: ${d.descricao}`,
+      mensagem: (d) => `Recebemos ${d.valorTexto} referente ao contrato ${d.codigo}. Obrigado!`,
+      link: (d) => `/cliente/propostas/${d.id}`, email: true,
+      emailTexto: (d) => ({ assunto: `Pagamento confirmado | OneMoreCode`, titulo: "Pagamento confirmado", paragrafos: [`Olá, ${d.primeiroNome}!`, `Confirmamos o recebimento de ${d.valorTexto} referente a "${d.descricao}" (contrato ${d.codigo}).`, "Obrigado pela confiança!"], botao: { texto: "Ver na área do cliente", link: `/cliente/propostas/${d.id}` } }),
+    },
+  },
   "documento.disponivel": {
     modulo: "ativo", categoria: "propostas", categoriaPor: (d) => (d.tipoDoc === "contrato" ? "contratos" : "propostas"),
     cliente: {
