@@ -4,7 +4,7 @@
 // status: "desenvolvimento" | "acesso-antecipado" | "disponivel"
 // "desenvolvidas" = funções já feitas e em testes finais; "previstas" = planejadas.
 // Mova itens de "previstas" para "desenvolvidas" só quando estiverem prontos de verdade.
-// Para adicionar o OneMoreFit no futuro, copie o bloco do OneMoreFlow e ajuste.
+// Para adicionar um produto, copie um bloco e ajuste.
 export const PRODUTOS = [
   {
     slug: "onemoreflow",
@@ -42,6 +42,41 @@ export const PRODUTOS = [
     cor: { de: "from-blue-500/25", para: "to-cyan-400/10", destaque: "text-cyan-300", borda: "border-cyan-400/30" },
     mensagemWhats: "Olá! Quero saber mais sobre o OneMoreFlow.",
     mensagemDemo: "Olá! Quero agendar uma demonstração do OneMoreFlow.",
+  },
+  {
+    slug: "onemorefit",
+    nome: "OneMoreFit",
+    categoria: "Gestão para academias e estúdios",
+    status: "desenvolvimento",
+    previsao: "fevereiro de 2027", // previsão, não prazo garantido
+    resumo: "Sistema para academias e estúdios: alunos, planos, matrículas, mensalidades, presenças e financeiro em um só lugar, no computador e no celular.",
+    descricao:
+      "O OneMoreFit organiza a rotina da academia: cadastro de alunos, planos e matrículas, controle de mensalidades e inadimplência, registro de presenças e o financeiro do negócio, com indicadores em tempo real e relatórios prontos.",
+    paraQuem: "Academias, estúdios de pilates, funcional, dança e lutas que querem controlar alunos e mensalidades sem planilhas.",
+    desenvolvidas: [
+      "Painel com indicadores em tempo real",
+      "Cadastro de alunos",
+      "Planos e matrículas, com aviso de término",
+      "Mensalidades, cobranças vencidas e inadimplência",
+      "Receitas, despesas e saldo do período",
+      "Registro de presenças",
+      "Relatórios de alunos, inadimplência, recebimentos, fluxo de caixa e frequência",
+      "Equipe com acessos por convite",
+      "Uso no celular",
+    ],
+    previstas: [
+      "Integração com catraca",
+      "Fichas de treino",
+    ],
+    imagem: { src: "/images/produtos/onemorefit.jpg", alt: "Painel do OneMoreFit no computador e no celular, com alunos ativos, cobranças vencidas e inadimplência" },
+    galeria: [
+      { src: "/images/produtos/onemorefit-alunos.jpg", alt: "Tela de alunos do OneMoreFit" },
+      { src: "/images/produtos/onemorefit-mensalidades.jpg", alt: "Tela de mensalidades do OneMoreFit" },
+      { src: "/images/produtos/onemorefit-relatorios.jpg", alt: "Tela de relatórios do OneMoreFit" },
+    ],
+    cor: { de: "from-rose-900/40", para: "to-red-950/20", destaque: "text-rose-300", borda: "border-rose-400/30" },
+    mensagemWhats: "Olá! Quero saber mais sobre o OneMoreFit.",
+    mensagemDemo: "Olá! Quero agendar uma demonstração do OneMoreFit.",
   },
 ];
 

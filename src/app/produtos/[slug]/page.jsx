@@ -73,7 +73,7 @@ export default async function ProdutoPage({ params }) {
                 {p.galeria.map((g) => (
                   <figure key={g.src} className="overflow-hidden rounded-2xl border border-white/10">
                     <Image src={g.src} alt={g.alt} width={1200} height={750} className="h-auto w-full" sizes="(max-width: 768px) 100vw, 500px" />
-                    <figcaption className="bg-white/5 px-4 py-3 text-sm text-white/70">{g.alt.replace(" do OneMoreFlow", "")}</figcaption>
+                    <figcaption className="bg-white/5 px-4 py-3 text-sm text-white/70">{g.alt.replace(` do ${p.nome}`, "")}</figcaption>
                   </figure>
                 ))}
               </div>
