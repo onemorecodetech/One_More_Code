@@ -78,6 +78,43 @@ export const PRODUTOS = [
     mensagemWhats: "Olá! Quero saber mais sobre o OneMoreFit.",
     mensagemDemo: "Olá! Quero agendar uma demonstração do OneMoreFit.",
   },
+  {
+    slug: "onemoreclinic",
+    nome: "OneMoreClinic",
+    categoria: "Gestão para clínicas e consultórios",
+    status: "desenvolvimento",
+    previsao: "janeiro de 2027", // previsão, não prazo garantido
+    resumo: "Sistema para clínicas e consultórios: agenda por profissional e sala, pacientes, equipe e financeiro, com módulos próprios para cada especialidade.",
+    descricao:
+      "O OneMoreClinic organiza a rotina da clínica: agenda por profissional e sala, confirmação e chegada dos pacientes, cadastro de pacientes e o financeiro, com painéis próprios para cada especialidade — estética, odontologia, nutrição e mais.",
+    paraQuem: "Clínicas de estética, consultórios odontológicos, nutricionistas e clínicas médicas que querem agenda e atendimento organizados em um só lugar.",
+    desenvolvidas: [
+      "Agenda por profissional e sala, com visão do dia e da semana",
+      "Confirmação, chegada, faltas e conclusão dos atendimentos",
+      "Bloqueio de horários em conflito",
+      "Cadastro de pacientes, com exportação",
+      "Equipe e acessos por função",
+      "Financeiro e relatórios",
+      "Módulo de Estética, com pacotes e sessões",
+      "Módulo de Odontologia, com cadeiras e retornos",
+      "Módulo de Nutrição",
+      "Uso no celular",
+    ],
+    previstas: [
+      "Módulo de Clínica Médica (em finalização)",
+      "Módulo de Fisioterapia",
+      "Módulo de Psicologia",
+    ],
+    imagem: { src: "/images/produtos/onemoreclinic.jpg", alt: "Painel do OneMoreClinic no computador e no celular, com a agenda do dia e o próximo atendimento" },
+    galeria: [
+      { src: "/images/produtos/onemoreclinic-agenda.jpg", alt: "Agenda do OneMoreClinic" },
+      { src: "/images/produtos/onemoreclinic-estetica.jpg", alt: "Painel de Estética do OneMoreClinic" },
+      { src: "/images/produtos/onemoreclinic-odonto.jpg", alt: "Painel de Odontologia do OneMoreClinic" },
+    ],
+    cor: { de: "from-teal-800/40", para: "to-cyan-900/20", destaque: "text-teal-300", borda: "border-teal-400/30" },
+    mensagemWhats: "Olá! Quero saber mais sobre o OneMoreClinic.",
+    mensagemDemo: "Olá! Quero agendar uma demonstração do OneMoreClinic.",
+  },
 ];
 
 export const STATUS = {
