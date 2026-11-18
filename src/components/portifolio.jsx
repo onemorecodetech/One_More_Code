@@ -19,16 +19,6 @@ const projects = [
     tags: ["Node.js", "Express", "Vercel", "Redis", "Painel admin", "SEO"],
   },
   {
-    title: "Top Training Academia",
-    category: "Site + painel administrativo",
-    description:
-      "Site para uma academia de Erechim apresentar modalidades, planos e atletas, com identidade visual forte e painel administrativo para a equipe atualizar o conteúdo sem depender de ninguém.",
-    image: "/images/portfolio/top-training-academia.jpg",
-    url: null, // preencher com "https://..." quando o site estiver no ar
-    dominio: "toptrainingacad.com.br",
-    tags: ["Node.js", "Express", "Vercel", "Painel admin", "SEO local"],
-  },
-  {
     title: "Sistema de Comandas",
     category: "Sistema web + app mobile · Projeto acadêmico",
     description:
@@ -286,7 +276,7 @@ export default function Portfolio() {
               Seu projeto pode ser o próximo
             </h3>
             <p className="text-white/70">
-              Conte sua ideia e prepararemos um orçamento sob medida.
+              Sites, sistemas, aplicativos e automações sob medida.
             </p>
           </div>
           <a
