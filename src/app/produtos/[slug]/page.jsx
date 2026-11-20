@@ -70,6 +70,21 @@ export default async function ProdutoPage({ params }) {
             </section>
           </div>
 
+          {p.planos?.length > 0 && (
+            <section className="mt-10">
+              <h2 className="text-2xl font-bold mb-2">Planos</h2>
+              <p className="text-white/70 mb-6">Escolha o plano que combina com o seu negócio. Valores sob consulta.</p>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {p.planos.map((pl) => (
+                  <div key={pl.nome} className={`rounded-2xl border ${p.cor.borda} bg-white/5 p-6`}>
+                    <h3 className={`text-lg font-bold ${p.cor.destaque}`}>{pl.nome}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/80">{pl.descricao}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {p.galeria?.length > 0 && (
             <section className="mt-10">
               <h2 className="text-2xl font-bold mb-6">Algumas telas</h2>
