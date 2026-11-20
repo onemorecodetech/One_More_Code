@@ -48,7 +48,7 @@ export const PRODUTOS = [
     nome: "OneMoreFit",
     categoria: "Gestão para academias e estúdios",
     status: "desenvolvimento",
-    previsao: "fevereiro de 2027", // previsão, não prazo garantido
+    previsao: "janeiro de 2027", // previsão, não prazo garantido
     resumo: "Sistema para academias e estúdios: alunos, planos, matrículas, mensalidades, presenças e financeiro em um só lugar, no computador e no celular.",
     descricao:
       "O OneMoreFit organiza a rotina da academia: cadastro de alunos, planos e matrículas, controle de mensalidades e inadimplência, registro de presenças e o financeiro do negócio, com indicadores em tempo real e relatórios prontos.",
