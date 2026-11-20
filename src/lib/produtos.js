@@ -62,12 +62,11 @@ export const PRODUTOS = [
       "Registro de presenças",
       "Relatórios de alunos, inadimplência, recebimentos, fluxo de caixa e frequência",
       "Equipe com acessos por convite",
-      "Uso no celular",
-    ],
-    previstas: [
       "Integração com catraca",
       "Fichas de treino",
+      "Uso no celular",
     ],
+    previstas: [],
     imagem: { src: "/images/produtos/onemorefit.jpg", alt: "Painel do OneMoreFit no computador e no celular, com alunos ativos, cobranças vencidas e inadimplência" },
     galeria: [
       { src: "/images/produtos/onemorefit-alunos.jpg", alt: "Tela de alunos do OneMoreFit" },

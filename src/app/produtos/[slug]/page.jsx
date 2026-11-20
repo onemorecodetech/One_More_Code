@@ -56,13 +56,17 @@ export default async function ProdutoPage({ params }) {
               <h2 className="text-xl font-bold mb-4">Funções</h2>
               {p.desenvolvidas?.length > 0 && (
                 <>
-                  <h3 className="mb-2 text-sm uppercase tracking-widest text-emerald-300">Já desenvolvidas · em testes finais</h3>
+                  <h3 className="mb-2 text-sm uppercase tracking-widest text-emerald-300">{p.previstas?.length > 0 ? "Já desenvolvidas · em testes finais" : "Funções"}</h3>
                   <ul className="mb-6 space-y-2">{p.desenvolvidas.map((f) => <li key={f} className="flex gap-3 text-white/85"><Check size={18} className="mt-0.5 shrink-0 text-emerald-300" aria-hidden="true" />{f}</li>)}</ul>
                 </>
               )}
-              <h3 className="mb-2 text-sm uppercase tracking-widest text-amber-200">Previstas</h3>
-              <ul className="space-y-2">{p.previstas.map((f) => <li key={f} className="flex gap-3 text-white/80"><Clock size={18} className="mt-0.5 shrink-0 text-amber-200" aria-hidden="true" />{f}</li>)}</ul>
-              <p className="mt-6 text-xs text-white/60">Funções previstas podem mudar até o lançamento.</p>
+              {p.previstas?.length > 0 && (
+                <>
+                  <h3 className="mb-2 text-sm uppercase tracking-widest text-amber-200">Previstas</h3>
+                  <ul className="space-y-2">{p.previstas.map((f) => <li key={f} className="flex gap-3 text-white/80"><Clock size={18} className="mt-0.5 shrink-0 text-amber-200" aria-hidden="true" />{f}</li>)}</ul>
+                  <p className="mt-6 text-xs text-white/60">Funções previstas podem mudar até o lançamento.</p>
+                </>
+              )}
             </section>
           </div>
 
